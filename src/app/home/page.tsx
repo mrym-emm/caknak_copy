@@ -4,14 +4,12 @@ import React, { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
-import { FaFeatherAlt, FaShieldAlt, FaBookOpen, FaScroll } from "react-icons/fa";
 import LanguageSwitcher from "~/components/LanguageSwitcher";
 
 export default function Home() {
-  const [hoveredSection, setHoveredSection] = useState<string | null>(null);
   const [hoveredNavItem, setHoveredNavItem] = useState<string | null>(null);
-  const menuItemRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
-  const [menuPositions, setMenuPositions] = useState<{ [key: string]: number }>({});
+  const menuItemRefs: Record<string, HTMLDivElement | null> = {};
+  const [menuPositions, setMenuPositions] = useState<Record<string, number>>({});
   const dropdownTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const navItems = [
@@ -86,7 +84,7 @@ export default function Home() {
   const handleMenuItemLeave = () => {
     dropdownTimeoutRef.current = setTimeout(() => {
       const dropdown = document.getElementById(`dropdown-${hoveredNavItem}`);
-      if (!dropdown || !dropdown.matches(":hover")) {
+      if (!dropdown?.matches(":hover")) {
         setHoveredNavItem(null);
       }
     }, 300);
@@ -146,7 +144,7 @@ export default function Home() {
             className="absolute bg-yellow-50/80 border-t border-[#5b4636] shadow-md z-40 origin-top"
             style={{
               top: "15.9%",
-              left: `${menuPositions[hoveredNavItem] || 0}px`,
+              left: `${menuPositions[hoveredNavItem] ?? 0}px`,
               transform: "translateX(-50%)",
               marginTop: "0.5rem",
               padding: "1rem",
