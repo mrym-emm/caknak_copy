@@ -8,7 +8,7 @@ import LanguageSwitcher from "~/components/LanguageSwitcher";
 
 export default function Home() {
   const [hoveredNavItem, setHoveredNavItem] = useState<string | null>(null);
-  const menuItemRefs: Record<string, HTMLDivElement | null> = {};
+  const menuItemRefs = useRef<Record<string, HTMLDivElement | null>>({});
   const [menuPositions, setMenuPositions] = useState<Record<string, number>>({});
   const dropdownTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -65,14 +65,13 @@ export default function Home() {
 
 
   useEffect(() => {
-    const positions: { [key: string]: number } = {};
-    Object.keys(menuItemRefs.current).forEach((key) => {
-      const el = menuItemRefs.current[key];
+    const positions: Record<string, number> = {};
+    Object.entries(menuItemRefs.current ?? {}).forEach(([key, el]) => {
       if (el) {
         const rect = el.getBoundingClientRect();
-        positions[key] = rect.left;
-      }
-    });
+            positions[key] = rect.left;
+          }
+        });
     setMenuPositions(positions);
   }, [hoveredNavItem]);
 
