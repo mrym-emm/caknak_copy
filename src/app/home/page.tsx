@@ -119,7 +119,9 @@ export default function Home() {
               <div
                 key={index}
                 className="relative"
-                ref={(el) => (menuItemRefs.current[item.label] = el)}
+                ref={(el) => {
+                  menuItemRefs.current[item.label] = el;
+                }}
                 onMouseEnter={() => handleMenuItemEnter(item.label)}
                 onMouseLeave={handleMenuItemLeave}
               >
