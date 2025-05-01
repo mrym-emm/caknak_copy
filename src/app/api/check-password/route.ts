@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import type { PasswordInput, PasswordResponse } from "@/types/password";
 
 export async function POST(req: Request) {
-  const input: PasswordInput = await req.json();
+    const input = (await req.json()) as PasswordInput;
 
   try {
     const res = await fetch("https://ems-royal-password-checker-tm02.hf.space/predict", {
