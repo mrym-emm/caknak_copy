@@ -29,7 +29,7 @@ const formatFeatureName = (name: string) => {
         has_123456: "Number Sequence",
         entropy: "Complexity Score",
     };
-    return map[name] || name;
+    return map[name] ?? name;
 };
 
 const formatFeatureValue = (name: string, value: string | number) => {
