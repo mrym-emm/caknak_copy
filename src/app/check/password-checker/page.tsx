@@ -34,7 +34,7 @@ const formatFeatureName = (name: string) => {
 
 const formatFeatureValue = (name: string, value: string | number) => {
     if (name === "has_qwerty" || name === "has_123456") return value === 1 ? "Yes" : "No";
-    if (name === "entropy") return typeof value === "number" ? value.toFixed(2) : value;
+    if (name === "entropy" && typeof value === "number") return value.toFixed(2);
     return value;
 };
 
@@ -54,8 +54,8 @@ export default function PasswordCheckPage() {
                 body: JSON.stringify({ password }),
             });
             if (!res.ok) throw new Error("API failed");
-            const data: PasswordResponse = await res.json();
-            setResult(data);
+            const json = await res.json() as PasswordResponse;
+            setResult(json);
         } catch (err) {
             setError("Something went wrong");
         } finally {
@@ -130,7 +130,7 @@ export default function PasswordCheckPage() {
                         </div>
 
                         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 whitespace-nowrap">
-                            {Object.entries(result.features).map(([key, val]) => (
+                            {Object.entries(result.features).map(([key, val]: [string, string | number]) => (
                                 <div key={key} className="bg-white/80 border-2 border-[#5b4636] rounded-lg p-3">
                                     <div className="text-sm text-[#5b4636] font-medium">{formatFeatureName(key)}</div>
                                     <div className="text-lg text-yellow-700 font-semibold">{formatFeatureValue(key, val)}</div>
