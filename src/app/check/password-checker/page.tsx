@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import type { PasswordResponse } from "@/types/password";
+import type{ PasswordResponse } from "~/types/password";
 import { motion } from "framer-motion";
 import TopNav from "~/components/TopNav";
 import Footer from "~/components/Footer";
@@ -146,7 +146,7 @@ export default function PasswordCheckPage() {
                                 {result.features.num_symbol === 0 && <p>&emsp; • &nbsp; &nbsp;Use special characters<span className="text-xl text-yellow-700">&nbsp; (!@#$%)</span></p>}
                                 {result.features.length < 12 && <p>&emsp; • &nbsp; &nbsp;Make it at least <span className="text-xl text-yellow-700">&nbsp;12 &nbsp;</span>characters</p>}
                                 {(result.features.has_qwerty === 1 || result.features.has_123456 === 1) && (
-                                <p>&emsp; • &nbsp; <span className="text-xl text-yellow-700">&nbsp;Avoid &nbsp;</span>patterns like '123456' or 'qwerty'</p>
+                                <p>&emsp; • &nbsp; <span className="text-xl text-yellow-700">&nbsp;Avoid &nbsp;</span>patterns like &apos;123456&apos; or &apos;qwerty&apos;</p>
                                 )}
                             </div>
                         )}

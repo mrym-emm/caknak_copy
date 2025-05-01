@@ -1,6 +1,6 @@
 
 import { NextResponse } from "next/server";
-import type { PasswordInput } from "@/types/password";
+import type { PasswordInput, PasswordResponse } from "@/types/password";
 
 export async function POST(req: Request) {
   const { password }: PasswordInput = await req.json();
@@ -15,6 +15,6 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "API call failed" }, { status: 500 });
   }
 
-  const data = await response.json();
+  const data: PasswordResponse = await response.json();
   return NextResponse.json(data);
 }
