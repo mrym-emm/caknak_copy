@@ -7,37 +7,28 @@ import LanguageSwitcher from "~/components/LanguageSwitcher";
 
 const items = [
   {
-    id: "trial_scroll",
-    label: "Trial Scroll",
-    message: "Unroll the scroll to challenge your courage and wisdom.",
-    img: "/main/trial_scroll.png",
-    position: "center",
-    top: "57%",
-    text_position: "58%",
+    id: "magic_feather",
+    label: "Magic Feather",
+    message: "TEST your instincts — every answer brings you closer to the truth.",
+    img: "/main/magic_feather2.png",
+    position: "left",
+    top: "64%",
+    text_position: "65%",
   },
   {
     id: "guardian_book",
     label: "Guardian Book",
-    message: "Open the book to reveal secrets that protect the brave.",
+    message: "EDUCATE your mind — the book holds secrets to protect your world.",
     img: "/main/guardian_book.png",
-    position: "left",
-    top: "62%",
-    text_position: "65%",
+    position: "right",
+    top: "73%",
+    text_position: "77%",
   },
   {
     id: "crystal_orb",
     label: "Crystal Orb",
-    message: "Gaze into the orb and uncover hidden dangers.",
+    message: "CHECK what’s hidden — the orb reveals dangers beneath the surface.",
     img: "/main/crystal_orb.png",
-    position: "right",
-    top: "74%",
-    text_position: "77%",
-  },
-  {
-    id: "magic_feather",
-    label: "Magic Feather",
-    message: "Brush the feather to learn the secrets of lost messages.",
-    img: "/main/magic_feather.png",
     position: "left",
     top: "81%",
     text_position: "85%",
@@ -113,6 +104,25 @@ export default function MainPage() {
         Skip
       </motion.button>
 
+      {/* Forest Title */}
+      {!enteringCastle && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 1 }}
+          className="absolute top-1/15 left-2/7 -translate-x-1/2 text-center z-20"
+        >
+          <h1 className="text-5xl font-bold text-yellow-100 drop-shadow-lg" style={{ fontFamily: "var(--font-sniglet)" }}>
+            The Enchanted Forest Beckons
+          </h1>
+          <p className="text-lg text-yellow-200 mt-2 max-w-md mx-auto" style={{ fontFamily: "var(--font-sniglet)" }}>
+            Gather the tools of wisdom: CHECK, EDUCATE, and TEST before the castle doors unlock.
+          </p>
+        </motion.div>
+      )}
+
+
       {/* Item icons */}
       {items.map((item) => (
         <motion.div
@@ -140,7 +150,7 @@ export default function MainPage() {
       {openedItems.length === items.length && !enteringCastle && (
         <motion.div
           className="absolute left-1/2 -translate-x-1/2 z-20 cursor-pointer"
-          style={{ top: "17%", left: "45%" }}
+          style={{ top: "22%", left: "47%" }}
           whileHover={{ scale: 1.1 }}
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
@@ -204,7 +214,7 @@ export default function MainPage() {
                   : "-left-4 border-r-8 border-r-yellow-700"
                   }`}
               ></div>
-              <div className="text-md font-medium">
+              <div className="text-md font-medium" style={{ fontFamily: "var(--font-sniglet)" }}>
                 {items.find((i) => i.id === activeItem)?.message}
               </div>
               <button
@@ -264,9 +274,11 @@ export default function MainPage() {
                 repeat: Infinity,
                 repeatType: "loop",
               }}
-              className="text-yellow-700 text-4xl font-bold border-2 border-yellow-700 rounded-lg p-4 bg-white/70 backdrop-blur-md shadow-lg relative z-10"
+              className="text-yellow-700 text-4xl font-bold border-2 border-yellow-700 rounded-lg 
+              p-4 bg-white/70 backdrop-blur-md shadow-lg relative z-10" 
+              style={{ fontFamily: "var(--font-sniglet)" }}
             >
-              Entering the castle...
+              As the gates creak open, a new chapter unfolds…
             </motion.div>
           </motion.div>
         )}
