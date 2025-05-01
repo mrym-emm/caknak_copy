@@ -1,6 +1,6 @@
 
 import { NextResponse } from "next/server";
-import { PasswordInput } from "@/types/password";
+import type { PasswordInput } from "@/types/password";
 
 export async function POST(req: Request) {
   const { password }: PasswordInput = await req.json();

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { PasswordResponse } from "@/types/password";
+import type { PasswordResponse } from "@/types/password";
 import { motion } from "framer-motion";
 import TopNav from "~/components/TopNav";
 import Footer from "~/components/Footer";
