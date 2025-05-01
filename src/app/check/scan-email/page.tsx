@@ -21,7 +21,7 @@ export default function ScanEmailPage() {
 
     try {
       const response = await fetch(`/api/check-email?email=${encodeURIComponent(email)}`);
-      const data = await response.json();
+      const data: { breached: boolean } = await response.json();
       if (data.breached) {
         setResult("risky");
       } else {
