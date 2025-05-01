@@ -46,7 +46,7 @@ export default function TopNav() {
       label: 'TEST',
       href: '/test',
       submenu: [
-        { label: 'Phishing Simulation', href: '/test/phishing-simulation', description: 'Test your ability to spot phishing' },
+        { label: 'Phishing Simulator', href: '/test/phishing-simulator', description: 'Immerse yourself' },
         { label: 'Security Quiz', href: '/test/security-quiz', description: 'Test your security knowledge' }
       ]
     },
