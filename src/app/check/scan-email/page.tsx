@@ -54,10 +54,10 @@ export default function ScanEmailPage() {
     >
       <TopNav />
 
-      <div className="flex flex-col items-center flex-grow text-center px-4">
+      <div className="flex flex-col items-center justify-center flex-grow text-center p-6">
 
         {/* ===== Top ===== */}
-        <h1 className="text-4xl md:text-5xl font-bold text-[#5b4636] mt-12 mb-2">
+        <h1 className="text-4xl text-[#5b4636] font-extrabold mb-4">
           Check Your Email Security
         </h1>
         <p className="text-[#5b4636] max-w-lg text-base md:text-lg mb-8">
