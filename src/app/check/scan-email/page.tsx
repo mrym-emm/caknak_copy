@@ -14,6 +14,11 @@ export default function ScanEmailPage() {
   const [result, setResult] = useState<"safe" | "risky" | null>(null);
   const [showCrystal, setShowCrystal] = useState(false);
 
+
+  interface CheckEmailResponse {
+    breached: boolean;
+  }
+
   const handleScan = async () => {
     if (!email) return;
     setLoading(true);
@@ -21,7 +26,7 @@ export default function ScanEmailPage() {
 
     try {
       const response = await fetch(`/api/check-email?email=${encodeURIComponent(email)}`);
-      const data: { breached: boolean } = await response.json();
+      const data: CheckEmailResponse = await response.json();
       if (data.breached) {
         setResult("risky");
       } else {
