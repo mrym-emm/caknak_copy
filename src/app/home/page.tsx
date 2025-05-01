@@ -59,7 +59,7 @@ export default function Home() {
       <TopNav />
 
       <section className="flex-grow pt-20 pb-6">
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 place-items-center">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-1 place-items-center">
           {sections.map((section) => (
             <div
               key={section.id}
@@ -67,7 +67,7 @@ export default function Home() {
               onClick={() => handleCardClick(section.id)}
             >
               <motion.div
-                className="relative w-full h-full transition-transform duration-[1.5s]"
+                className="relative w-full h-full transition-transform duration-[0.5s]"
                 animate={{ rotateY: flippedCard === section.id ? 180 : 0 }}
                 style={{ transformStyle: "preserve-3d" }}
               >

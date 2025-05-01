@@ -78,9 +78,9 @@ export default function TopNav() {
   };
 
   const isActive = (label: string) => {
-    if (label === 'CHECK') return pathname.startsWith('/scan-email') || pathname.startsWith('/phishing-detection') || pathname.startsWith('/password-checker');
-    if (label === 'EDUCATE') return pathname.startsWith('/decode-danger') || pathname.startsWith('/recovery-steps') || pathname.startsWith('/cybersecurity-tips');
-    if (label === 'TEST') return pathname.startsWith('/phishing-simulation') || pathname.startsWith('/security-quiz');
+    if (label === 'CHECK') return pathname.startsWith('/check');
+    if (label === 'EDUCATE') return pathname.startsWith('/educate');
+    if (label === 'TEST') return pathname.startsWith('/test');
     return pathname.startsWith('/home');
   };
 
