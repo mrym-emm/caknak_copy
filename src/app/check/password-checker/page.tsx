@@ -32,9 +32,9 @@ const formatFeatureName = (name: string) => {
     return map[name] || name;
 };
 
-const formatFeatureValue = (name: string, value: any) => {
+const formatFeatureValue = (name: string, value: string | number) => {
     if (name === "has_qwerty" || name === "has_123456") return value === 1 ? "Yes" : "No";
-    if (name === "entropy") return value.toFixed(2);
+    if (name === "entropy") return typeof value === "number" ? value.toFixed(2) : value;
     return value;
 };
 
@@ -63,7 +63,7 @@ export default function PasswordCheckPage() {
         }
     };
 
-    const confidence = result ? calculateConfidence(result.features.entropy) : 0;
+    const confidence = calculateConfidence(result?.features.entropy ?? 0);
     const hasTips = result && (
         result.features.num_upper === 0 ||
         result.features.num_digit === 0 ||
