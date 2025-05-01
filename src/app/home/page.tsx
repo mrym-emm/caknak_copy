@@ -35,7 +35,7 @@ export default function Home() {
       title: "TEST",
       icon: "/main/magic_feather2_ink.png",
       submenu: [
-        { label: "📜 Phishing Simulation", href: "/test/phishing-simulation", description: "Test your ability to spot phishing" },
+        { label: "📜 Phishing Simulator", href: "/test/phishing-simulator", description: "Immerse yourself" },
         { label: "📜 Security Quiz", href: "/test/security-quiz", description: "Test your security knowledge" },
       ],
     },

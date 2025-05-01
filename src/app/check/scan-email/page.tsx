@@ -27,7 +27,7 @@ export default function ScanEmailPage() {
     try {
       const response = await fetch(`/api/check-email?email=${encodeURIComponent(email)}`);
       const data = (await response.json()) as CheckEmailResponse;
-      
+
       if (data.breached) {
         setResult("risky");
       } else {
@@ -128,7 +128,7 @@ export default function ScanEmailPage() {
                 {/* Close Crystal Ball Button */}
                 <button
                   onClick={() => setShowCrystal(false)}
-                  className="absolute top-2 right-2 text-[#5b4636] bg-white/70 rounded-full p-1 hover:bg-yellow-100 shadow"
+                  className="absolute top-12 right-12 text-[#5b4636] bg-white/70 rounded-full p-1 border-4 border-[#5b4636] hover:bg-yellow-100 shadow"
                   style={{ pointerEvents: "auto" }}
                 >
                   <FaTimes />
