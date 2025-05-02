@@ -26,8 +26,8 @@ export default function Home() {
       icon: "/main/guardian_book.png",
       submenu: [
         { label: "🕯️ Decode Danger", href: "/educate/decode-danger", description: "Explore real threats through data and story" },
-        { label: "🕯️ Recovery Steps", href: "/educate/recovery-steps", description: "Learn how to recover from a phishing attack" },
-        { label: "🕯️ Cybersecurity Tips", href: "/educate/cybersecurity-tips", description: "Best practices for cybersecurity" },
+        { label: "🕯️ Recovery Steps", href: "/educate/recovery-steps", description: "Step - by - step on info leak response, account security & loss prevention" },
+        { label: "🕯️ Phishing Prevention", href: "/educate/phishing-prevention", description: "Learn phishing trap ID, anti - fraud skills, secure personal info" },
       ],
     },
     {

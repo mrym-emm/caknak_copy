@@ -36,7 +36,7 @@ const SwipeRight = () => {
         <div className="expanded-content">
           {/* embedded game from itch.io */}
           <iframe
-            src="https://itch.io/embed-upload/13541083?color=333333"
+            src="https://itch.io/embed-upload/13558716?color=333333"
             allowFullScreen
             style={{
               width: '640px',

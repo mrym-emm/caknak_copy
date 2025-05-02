@@ -93,7 +93,7 @@ export default function PasswordCheckPage() {
                 <p className="text-[#5b4636] max-w-lg mb-6">Enter a password to check its strength and get improvement tips.</p>
 
                 <input
-                    type="password"
+                    type="text"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="Enter password..."
