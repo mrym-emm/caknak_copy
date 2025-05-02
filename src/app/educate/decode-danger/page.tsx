@@ -19,10 +19,10 @@ export default function DecodeDangerPage() {
     >
       <TopNav />    
 
-      {/* pagecontent */}
+      {/* page content */}
       <section className="p-8">
         <div className="text-center">
-          <h1 className="text-3xl font-bold text-[#5b4636] mb-2">
+          <h1 className="text-4xl font-extrabold text-[#5b4636] mb-2">
             Decode the Danger
           </h1>
           <p className="text-lg text-[#5b4636] mb-6 max-w-xl mx-auto">

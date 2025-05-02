@@ -17,14 +17,6 @@ export default function TopNav() {
 
   const navItems = [
     {
-      label: 'HOME',
-      href: '/home',
-      submenu: [
-        { label: 'Main Page', href: '/home', description: 'Return to our main homepage' },
-        { label: 'About Us', href: '/about', description: 'Learn more about our mission' }
-      ]
-    },
-    {
       label: 'CHECK',
       href: '/check',
       submenu: [
@@ -91,12 +83,14 @@ export default function TopNav() {
           <LanguageSwitcher />
         </div>
 
-        <div className="text-center mb-4">
+        <Link href="/home" className="text-center">
           <h1 className="text-6xl text-[#5b4636]" style={{ fontFamily: "'Great', cursive" }}>caKnak</h1>
-        </div>
+        </Link>
+
+        <div className="mb-4"/>
 
         <div className="container mx-auto px-6 border-b border-[#5b4636]">
-          <nav className="flex justify-center space-x-20 relative">
+          <nav className="flex justify-center space-x-24 relative">
             {navItems.map((item, index) => (
               <div
                 key={index}
@@ -108,7 +102,7 @@ export default function TopNav() {
                 onMouseLeave={handleMenuItemLeave}
               >
                 <span
-                  className={`text-md ${
+                  className={`text-lg ${
                     isActive(item.label) ? 'text-yellow-700' : 'text-[#5b4636]'
                   } hover:text-yellow-700 cursor-default`}
                   style={{ fontFamily: "var(--font-sniglet)" }}
@@ -131,7 +125,7 @@ export default function TopNav() {
             transition={{ duration: 0.3 }}
             className="absolute z-50 bg-[#fff7e6] shadow-lg rounded-lg px-4 py-4"
             style={{
-              top: "16.6%",
+              top: "17.1%",
               left: `${menuPositions[hoveredNavItem] ?? 0}px`,
               transform: "translateX(-50%)",
               marginTop: "0.5rem",
