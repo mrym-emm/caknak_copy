@@ -1,10 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import type{ PasswordResponse } from "~/types/password";
+import type { PasswordResponse } from "~/types/password";
 import { motion } from "framer-motion";
 import TopNav from "~/components/TopNav";
 import Footer from "~/components/Footer";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 const calculateConfidence = (entropy: number) => {
     if (entropy >= 4) return 1;
@@ -16,7 +17,7 @@ const getStrengthText = (confidence: number) => {
     if (confidence < 0.40) return "Weak 🔴";
     if (confidence < 0.75) return "Medium 🟠";
     return "Strong 🟢";
-  };
+};
 
 const formatFeatureName = (name: string) => {
     const map: Record<string, string> = {
@@ -40,6 +41,7 @@ const formatFeatureValue = (name: string, value: string | number) => {
 
 export default function PasswordCheckPage() {
     const [password, setPassword] = useState("");
+    const [showPassword, setShowPassword] = useState(false);
     const [result, setResult] = useState<PasswordResponse | null>(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
@@ -92,19 +94,29 @@ export default function PasswordCheckPage() {
                 </h1>
                 <p className="text-[#5b4636] max-w-lg mb-6">Enter a password to check its strength and get improvement tips.</p>
 
-                <input
-                    type="text"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    placeholder="Enter password..."
-                    className="w-80 px-4 py-3 mb-4 rounded-lg border-4 border-[#5b4636] text-[#5b4636] bg-white/80 shadow-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-yellow-500"
-                />
+                <div className="relative w-80">
+                    <input
+                        type={showPassword ? "text" : "password"}
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        placeholder="Enter password..."
+                        className="w-full px-4 py-3 pr-12 rounded-lg border-4 border-[#5b4636] text-[#5b4636] bg-white/80 shadow-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                    />
+                    <button
+                        type="button"
+                        onClick={() => setShowPassword(!showPassword)}
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-[#5b4636] text-xl focus:outline-none"
+                        aria-label="Toggle password visibility"
+                    >
+                        {showPassword ? <FaEye /> : <FaEyeSlash />} 
+                    </button>
+                </div>
 
                 <motion.button
                     whileHover={{ scale: 1.05, y: -3, boxShadow: "0 0 20px #fde68a" }}
                     disabled={loading}
                     onClick={handleCheck}
-                    className="px-8 py-3 rounded-xl font-bold text-xl text-[#5b4636] border-4 border-[#5b4636] bg-[url('/textures/parchment-texture.png')] bg-cover"
+                    className="px-8 py-3 mt-4 rounded-xl font-bold text-xl text-[#5b4636] border-4 border-[#5b4636] bg-[url('/textures/parchment-texture.png')] bg-cover"
                 >
                     {loading ? "Checking..." : "Check"}
                 </motion.button>
@@ -146,7 +158,7 @@ export default function PasswordCheckPage() {
                                 {result.features.num_symbol === 0 && <p>&emsp; • &nbsp; &nbsp;Use special characters<span className="text-xl text-yellow-700">&nbsp; (!@#$%)</span></p>}
                                 {result.features.length < 12 && <p>&emsp; • &nbsp; &nbsp;Make it at least <span className="text-xl text-yellow-700">&nbsp;12 &nbsp;</span>characters</p>}
                                 {(result.features.has_qwerty === 1 || result.features.has_123456 === 1) && (
-                                <p>&emsp; • &nbsp; <span className="text-xl text-yellow-700">&nbsp;Avoid &nbsp;</span>patterns like &apos;123456&apos; or &apos;qwerty&apos;</p>
+                                    <p>&emsp; • &nbsp; <span className="text-xl text-yellow-700">&nbsp;Avoid &nbsp;</span>patterns like &apos;123456&apos; or &apos;qwerty&apos;</p>
                                 )}
                             </div>
                         )}

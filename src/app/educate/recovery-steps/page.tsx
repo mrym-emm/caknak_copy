@@ -4,6 +4,7 @@ import TopNav from "~/components/TopNav";
 import Footer from "~/components/Footer";
 import { FaCheckCircle, FaTimesCircle, FaUniversity, FaCreditCard, FaWallet, FaShoppingCart, FaUserSecret, FaExclamationCircle } from "react-icons/fa";
 import Link from "next/link";
+import { motion } from "framer-motion";
 
 
 export default function RecoverySteps() {
@@ -64,11 +65,33 @@ export default function RecoverySteps() {
                             <span className="font-bold">myname1990</span>
                         </div>
                     </div>
-                    <Link href="/check/password-checker" className="flex justify-center">
-                        <button className="bg-[#5b4636] text-[#fef5e7] text-lg font-bold rounded-2xl px-6 py-3 border-4 border-yellow-400 shadow hover:scale-105 transition">
+                    {/* <Link href="/check/password-checker" className="flex justify-center">
+                        <button className="bg-[#fef5e7] text-[#5b4636] text-lg font-bold rounded-2xl px-6 py-3 border-4 border-[#5b4636] shadow hover:scale-105 transition">
                             Click Here to Verify Your Password
                         </button>
                     </Link>
+                    <motion.button
+                        whileHover={{
+                            boxShadow: "0 0 20px 10px rgba(255, 255, 150, 0.6)",
+                            textShadow: "0px 0px 8px #f5e050",
+                            y: -5,
+                            scale: 1.05,
+                            rotate: [0, 2, -2, 2, 0],
+                        }}
+                        transition={{ duration: 0.6, repeat: Infinity, repeatType: "reverse" }}
+                        style={{
+                            backgroundImage: "url('/textures/parchment-texture.png')",
+                            backgroundRepeat: "repeat",
+                            backgroundSize: "cover",
+                            backgroundPosition: "center",
+                            color: "#5b4636",
+                            fontSize: "24px",
+                        }}
+                        className="px-6 py-3 rounded-xl shadow-md font-semibold text-lg border-4 border-[#5b4636]"
+                        onClick={() => (window.location.href = "/home")}
+                    >
+                        Click Here to Verify Your Password
+                    </motion.button> */}
                 </div>
 
                 {/* Step 2 */}
@@ -164,11 +187,11 @@ export default function RecoverySteps() {
                             <li>Too-good-to-be-true offers</li>
                         </ul>
                     </div>
-                    <Link href="/educate/phishing-prevention" className="flex justify-center">
+                    {/* <Link href="/educate/phishing-prevention" className="flex justify-center">
                         <button className="bg-[#5b4636] text-[#fef5e7] text-lg font-bold rounded-2xl px-6 py-3 border-4 border-yellow-400 shadow hover:scale-105 transition">
                             Learn More About Phishing Prevention
                         </button>
-                    </Link>
+                    </Link> */}
                 </div>
             </div>
 

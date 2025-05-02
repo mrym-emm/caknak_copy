@@ -64,7 +64,6 @@ export default function Home() {
             <div
               key={section.id}
               className="relative w-64 h-96 cursor-pointer perspective-1000 group"
-              onClick={() => handleCardClick(section.id)}
             >
               <motion.div
                 className="relative w-full h-full transition-transform duration-[0.5s]"
@@ -74,7 +73,11 @@ export default function Home() {
                 {/* Front */}
                 <div
                   className="absolute w-full h-full flex flex-col justify-center items-center text-center rounded-xl shadow-lg border-4 border-[#5b4636] bg-[url('/textures/rune-circle-bg.png')] bg-cover bg-center overflow-hidden"
-                  style={{ backfaceVisibility: "hidden" }}
+                  style={{
+                    backfaceVisibility: "hidden",
+                    pointerEvents: flippedCard === section.id ? "none" : "auto",
+                  }}
+                  onClick={() => handleCardClick(section.id)}
                 >
                   <h3
                     className="absolute top-4 w-full text-center text-5xl font-bold"
@@ -105,16 +108,16 @@ export default function Home() {
                   style={{ backfaceVisibility: "hidden" }}
                 >
                   {section.submenu.map((item, idx) => (
-                    <div
+                    <button
                       key={idx}
-                      className="mb-4 text-[#5b4636] hover:bg-[#e6dabf] p-2 rounded cursor-pointer w-full transition"
+                      className="mb-4 text-[#5b4636] hover:bg-[#fadc98] hover:scale-105 hover:shadow-[0_0_20px_#f5d87d] p-2 rounded cursor-pointer w-full transition"
                       onClick={(e) => {
                         e.stopPropagation();
                         window.location.href = item.href;
                       }}
                     >
                       <h4 className="font-semibold text-lg flex items-center justify-center gap-1 whitespace-nowrap">
-                       {item.label}
+                        {item.label}
                         <span
                           className="ml-2 text-sm text-yellow-700 font-bold"
                           style={{ fontFamily: "'Great', cursive" }}
@@ -123,7 +126,7 @@ export default function Home() {
                         </span>
                       </h4>
                       <p className="text-sm">{item.description}</p>
-                    </div>
+                    </button>
                   ))}
                 </div>
               </motion.div>

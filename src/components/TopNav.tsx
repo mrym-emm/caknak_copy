@@ -17,6 +17,13 @@ export default function TopNav() {
 
   const navItems = [
     {
+      label: 'HOME',
+      href: '/home',
+      submenu: [
+        { label: 'Home', href: '/home', description: 'Welcome to caKnak' }
+      ]
+    },
+    {
       label: 'CHECK',
       href: '/check',
       submenu: [
