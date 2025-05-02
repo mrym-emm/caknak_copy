@@ -27,7 +27,7 @@ export default function PhishingPreventionPage() {
                         <img src="/main/guardian_book.png" alt="Cyber Heroes" className="w-15 h-20 inline-block" /> Phishing Prevention for Super Cyber Heroes!
                     </h1>
                     <div className="text-[#5b4636] text-center text-lg">
-                        Join us on a cyber adventure to learn how to protect yourself from digital tricksters called "phishers"!
+                        Join us on a cyber adventure to learn how to protect yourself from digital tricksters called &quot;phishers&quot;!
                     </div>
                 </div>
 
@@ -40,7 +40,7 @@ export default function PhishingPreventionPage() {
                         Phishing is a sneaky trick where scammers pretend to be trusted sources to steal your information.
                     </p>
                     <p className="mt-2">
-                        It's like when someone pretends to be your friend to get you to share a secret - but online!
+                        It&apos;s like when someone pretends to be your friend to get you to share a secret - but online!
                     </p>
                     <div className="flex flex-col gap-2 text-lg font-bold pt-5">Phishers might try to get your:</div>
                     <ul className="list-disc ml-6 mt-2 space-y-1">
@@ -87,7 +87,7 @@ export default function PhishingPreventionPage() {
                                 <p className="text-gray-500 text-xs">No mutual friends</p>
                                 <button className="mt-1 px-3 py-1 bg-blue-400 text-white text-sm rounded hover:scale-105 transition">Accept Request</button>
                             </div>
-                            <p className="text-sm pt-4">Be careful of friend requests from people you don't know – they might want to steal your information!</p>
+                            <p className="text-sm pt-4">Be careful of friend requests from people you don&apos;t know – they might want to steal your information!</p>
                         </div>
 
                         {/* Game Offer */}
