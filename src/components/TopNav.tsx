@@ -132,7 +132,7 @@ export default function TopNav() {
             transition={{ duration: 0.3 }}
             className="absolute z-50 bg-[#fff7e6] shadow-lg rounded-lg px-4 py-4"
             style={{
-              top: "17.1%",
+              top: "16.5%",
               left: `${menuPositions[hoveredNavItem] ?? 0}px`,
               transform: "translateX(-50%)",
               marginTop: "0.5rem",
@@ -145,7 +145,7 @@ export default function TopNav() {
               <Link
                 key={idx}
                 href={subItem.href}
-                className="block mb-3 px-3 py-2 rounded-md hover:bg-[#f3e9d2]"
+                className="block px-3 py-2 rounded-md hover:bg-[#f3e9d2]"
                 style={{ color: "#5b4636", fontFamily: "var(--font-sniglet)" }}
               >
                 <h3 className="font-semibold">{subItem.label}</h3>

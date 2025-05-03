@@ -29,7 +29,7 @@ export default function LanguageSwitcher() {
     <div className="relative" ref={langDropdownRef}>
       <button
         onClick={() => setShowLanguageDropdown(!showLanguageDropdown)}
-        className="flex items-center text-sm px-3 py-2 bg-white border border-gray-200 rounded-md hover:bg-gray-50"
+        className="flex items-center text-sm px-3 py-2 bg-white border border-gray-200 rounded-md hover:bg-gray-5"
       >
         <FaGlobe className="mr-2" />
         <span>{language}</span>
@@ -40,16 +40,16 @@ export default function LanguageSwitcher() {
         <div className="absolute right-0 mt-1 w-24 bg-white border border-gray-200 rounded-md shadow-lg z-10">
           <button
             onClick={() => changeLanguage('EN')}
-            className="block w-full text-left px-4 py-2 hover:bg-gray-50"
+            className="block w-full text-left px-4 py-2 hover:bg-gray-100 rounded-md"
           >
             English
           </button>
-          <button
+          {/* <button
             onClick={() => changeLanguage('ZH')}
             className="block w-full text-left px-4 py-2 hover:bg-gray-50"
           >
             中文
-          </button>
+          </button> */}
         </div>
       )}
     </div>
