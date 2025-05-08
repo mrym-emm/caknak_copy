@@ -225,7 +225,7 @@ export default function PhishingPreventionPage() {
                             <h3 className="font-bold text-lg text-[#2e8b57] mb-2">Check for Spelling Mistakes</h3>
                             <p className="text-sm text-[#333] flex-grow">Phishers often make spelling and grammar mistakes. Big companies like Google or Roblox don&apos;t make these errors!</p>
                             <div className="bg-[#fef9e7] border border-[#e0c97c] rounded-lg p-2 text-xs text-[#5b4636] mt-2">
-                                Example: "Dear Costumer, Your acount needs updating"
+                                Example: &quot;Dear Costumer, Your acount needs updating&quot;
                             </div>
                         </div>
 
