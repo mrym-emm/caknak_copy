@@ -7,6 +7,8 @@ import TopNav from "~/components/TopNav";
 import Footer from "~/components/Footer";
 import Link from "next/link";
 import { FaTimes } from "react-icons/fa";
+import { createClient } from '@supabase/supabase-js';
+import type { SupabaseClient } from '@supabase/supabase-js';
 
 export default function ScanEmailPage() {
   const [email, setEmail] = useState("");
@@ -14,9 +16,20 @@ export default function ScanEmailPage() {
   const [result, setResult] = useState<"safe" | "risky" | null>(null);
   const [showCrystal, setShowCrystal] = useState(false);
 
+  // connecting to supabase
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+  const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
+  const supabase: SupabaseClient = createClient(supabaseUrl, supabaseKey);
 
   interface CheckEmailResponse {
     breached: boolean;
+  }
+
+  // function to hash email
+  async function hashEmail(email: string): Promise<string> {
+    const enc = new TextEncoder();
+    const buf = await crypto.subtle.digest("SHA-256", enc.encode(email.trim().toLowerCase()));
+    return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, "0")).join("");
   }
 
   const handleScan = async () => {
@@ -25,7 +38,19 @@ export default function ScanEmailPage() {
     setResult(null);
 
     try {
-      const response = await fetch(`/api/check-email?email=${encodeURIComponent(email)}`);
+      // hash & store the email
+      const email_hash = await hashEmail(email);
+      await supabase
+        .from("hibp_breach_check")
+        .insert({
+          email_hash,
+          created_at: new Date().toISOString(),
+        });
+
+      //hibp api to be changed -will talk to yiju abt this
+      const response = await fetch(
+        `/api/check-email?email=${encodeURIComponent(email)}`
+      );
       const data = (await response.json()) as CheckEmailResponse;
 
       if (data.breached) {
@@ -33,7 +58,7 @@ export default function ScanEmailPage() {
       } else {
         setResult("safe");
       }
-      setShowCrystal(true); 
+      setShowCrystal(true);
     } catch (error) {
       console.error("Scan error:", error);
     } finally {
@@ -112,9 +137,8 @@ export default function ScanEmailPage() {
                   className="opacity-90 drop-shadow-xl"
                 />
                 <motion.div
-                  className={`absolute left-1/2 top-4/11 transform -translate-x-1/2 -translate-y-1/2 text-center ${
-                    result === "safe" ? "text-green-700" : "text-red-700"
-                  } font-bold`}
+                  className={`absolute left-1/2 top-4/11 transform -translate-x-1/2 -translate-y-1/2 text-center ${result === "safe" ? "text-green-700" : "text-red-700"
+                    } font-bold`}
                   style={{
                     fontSize: "2.5rem",
                     textShadow: "0 0 8px white",
