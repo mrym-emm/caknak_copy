@@ -36,9 +36,9 @@ export default function TopNav() {
       label: 'EDUCATE',
       href: '/educate',
       submenu: [
-        { label: 'Decode Danger', href: '/educate/decode-danger', description: 'Explore real threats through data and story' },
         { label: 'Recovery Steps', href: '/educate/recovery-steps', description: 'Step - by - step on info leak response, account security & loss prevention' },
-        { label: 'Phishing Prevention', href: '/educate/phishing-prevention', description: 'Learn phishing trap ID, anti - fraud skills, secure personal info' }
+        { label: 'Phishing Prevention', href: '/educate/phishing-prevention', description: 'Learn phishing trap ID, anti - fraud skills, secure personal info' },
+        { label: 'Decode Danger', href: '/educate/decode-danger', description: 'Explore real threats through data and story' }
       ]
     },
     {

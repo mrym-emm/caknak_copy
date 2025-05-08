@@ -5,6 +5,7 @@ import PhishingSimulator from '~/app/_components/phishing-sim';
 import { motion } from 'framer-motion';
 import TopNav from '~/components/TopNav';
 import Footer from '~/components/Footer';
+import FlipCard from '~/components/FlipCard';
 
 /**
  * data structure for tipu cards
@@ -150,22 +151,19 @@ export default function DecodeDangerPage() {
               <div className="flex flex-col items-center space-y-8">
                 {/* map through the tipu data to create a card for each item */}
                 {tipuData.map((item) => (
-                  <div
+                  <FlipCard
                     key={item.letter}
-                    className="flip-card w-24 h-24"
-                  >
-                    <div className="flip-card-inner">
-                      {/* front side shows just the letter */}
-                      <div className="flip-card-front bg-[#e9a95f] rounded-xl flex items-center justify-center">
+                    frontContent={
+                      <div className="bg-[#e9a95f] rounded-xl flex items-center justify-center w-full h-full">
                         <span className="text-white text-5xl font-bold">{item.letter}</span>
                       </div>
-
-                      {/* back side reveals the meaning */}
-                      <div className="flip-card-back bg-[#f0b574] rounded-xl flex flex-col items-center justify-center p-3">
+                    }
+                    backContent={
+                      <div className="bg-[#f0b574] rounded-xl flex flex-col items-center justify-center p-3 w-full h-full">
                         <p className="text-[#5b4636] font-semibold text-sm leading-tight">{item.malay}</p>
                       </div>
-                    </div>
-                  </div>
+                    }
+                  />
                 ))}
 
                 {/* user instruction for the flip cards */}
@@ -190,45 +188,6 @@ export default function DecodeDangerPage() {
           </motion.div>
         </div>
       </section>
-
-      {/* css styles for the interactive flip card animation */}
-      <style jsx>{`
-        /* container for the 3d perspective effect */
-        .flip-card {
-          perspective: 1000px;
-          cursor: pointer;
-        }
-        
-        /* inner container that handles the rotation */
-        .flip-card-inner {
-          position: relative;
-          width: 100%;
-          height: 100%;
-          text-align: center;
-          transition: transform 0.6s;
-          transform-style: preserve-3d;
-          box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-        }
-        
-        /* trigger the flip animation on hover */
-        .flip-card:hover .flip-card-inner {
-          transform: rotateY(180deg);
-        }
-        
-        /* shared styles for both sides of the card */
-        .flip-card-front, .flip-card-back {
-          position: absolute;
-          width: 100%;
-          height: 100%;
-          -webkit-backface-visibility: hidden;
-          backface-visibility: hidden;
-        }
-        
-        /* position the back face reversed so it's hidden until flipped */
-        .flip-card-back {
-          transform: rotateY(180deg);
-        }
-      `}</style>
 
       {/* spacer to push footer to bottom */}
       <div className="flex-grow" />

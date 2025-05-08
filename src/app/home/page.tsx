@@ -25,9 +25,9 @@ export default function Home() {
       title: "EDUCATE",
       icon: "/main/guardian_book.png",
       submenu: [
-        { label: "🕯️ Decode Danger", href: "/educate/decode-danger", description: "Explore real threats through data and story" },
         { label: "🕯️ Recovery Steps", href: "/educate/recovery-steps", description: "Step - by - step on info leak response, account security & loss prevention" },
         { label: "🕯️ Phishing Prevention", href: "/educate/phishing-prevention", description: "Learn phishing trap ID, anti - fraud skills, secure personal info" },
+        { label: "🕯️ Decode Danger", href: "/educate/decode-danger", description: "Explore real threats through data and story" },
       ],
     },
     {
@@ -66,7 +66,7 @@ export default function Home() {
               className="relative w-64 h-96 cursor-pointer perspective-1000 group"
             >
               <motion.div
-                className="relative w-full h-full transition-transform duration-[0.5s]"
+                className="relative w-full h-full transition-transform duration-[0.1s]"
                 animate={{ rotateY: flippedCard === section.id ? 180 : 0 }}
                 style={{ transformStyle: "preserve-3d" }}
               >

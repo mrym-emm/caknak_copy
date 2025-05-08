@@ -195,7 +195,7 @@ export default function PhishingPreventionPage() {
                             <div className="flex-shrink-0 text-3xl">👆</div>
                             <div>
                                 <h3 className="font-bold text-lg">Ask parents before clicking</h3>
-                                <p className="text-sm">If you're not sure about a link or download, ask an adult for help before clicking.</p>
+                                <p className="text-sm">If you&apos;re not sure about a link or download, ask an adult for help before clicking.</p>
                             </div>
                         </div>
                         <div className="flex gap-4">
@@ -208,8 +208,8 @@ export default function PhishingPreventionPage() {
                         <div className="flex gap-4">
                             <div className="flex-shrink-0 text-3xl">✉️</div>
                             <div>
-                                <h3 className="font-bold text-lg">Don't open strange messages</h3>
-                                <p className="text-sm">Be careful with messages from people you don’t know or that look suspicious.</p>
+                                <h3 className="font-bold text-lg">Don&apos;t open strange messages</h3>
+                                <p className="text-sm">Be careful with messages from people you don&apos;t know or that look suspicious.</p>
                             </div>
                         </div>
                     </div>
@@ -223,7 +223,7 @@ export default function PhishingPreventionPage() {
                         <div className="bg-white border border-[#a0d5c1] border-3 rounded-xl p-4 shadow-md flex flex-col">
                             <div className="text-3xl text-[#2e8b57] mb-2">✅</div>
                             <h3 className="font-bold text-lg text-[#2e8b57] mb-2">Check for Spelling Mistakes</h3>
-                            <p className="text-sm text-[#333] flex-grow">Phishers often make spelling and grammar mistakes. Big companies like Google or Roblox don't make these errors!</p>
+                            <p className="text-sm text-[#333] flex-grow">Phishers often make spelling and grammar mistakes. Big companies like Google or Roblox don&apos;t make these errors!</p>
                             <div className="bg-[#fef9e7] border border-[#e0c97c] rounded-lg p-2 text-xs text-[#5b4636] mt-2">
                                 Example: "Dear Costumer, Your acount needs updating"
                             </div>
@@ -233,9 +233,9 @@ export default function PhishingPreventionPage() {
                         <div className="bg-white border border-[#a0d5c1] border-3 rounded-xl p-4 shadow-md flex flex-col">
                             <div className="text-3xl text-[#2e8b57] mb-2">⚠️</div>
                             <h3 className="font-bold text-lg text-[#2e8b57] mb-2">Beware of Scary Messages</h3>
-                            <p className="text-sm text-[#333] flex-grow">Phishers try to scare you with "URGENT!" messages or threats that your account will be deleted.</p>
+                            <p className="text-sm text-[#333] flex-grow">Phishers try to scare you with &quot;URGENT!&quot; messages or threats that your account will be deleted.</p>
                             <div className="bg-[#fef9e7] border border-[#e0c97c] rounded-lg p-2 text-xs text-[#5b4636] mt-2">
-                                Example: "WARNING! Act now or your account will be DELETED in 24 hours!"
+                                Example: &quot;WARNING! Act now or your account will be DELETED in 24 hours!&quot;
                             </div>
                         </div>
 
@@ -243,9 +243,9 @@ export default function PhishingPreventionPage() {
                         <div className="bg-white border border-[#a0d5c1] border-3 rounded-xl p-4 shadow-md flex flex-col">
                             <div className="text-3xl text-[#2e8b57] mb-2">🔗</div>
                             <h3 className="font-bold text-lg text-[#2e8b57] mb-2">Look at the URL</h3>
-                            <p className="text-sm text-[#333] flex-grow">Check website addresses carefully. Phishers use tricks like "r0blox.com" instead of "roblox.com".</p>
+                            <p className="text-sm text-[#333] flex-grow">Check website addresses carefully. Phishers use tricks like &quot;r0blox.com&quot; instead of &quot;roblox.com&quot;.</p>
                             <div className="bg-[#fef9e7] border border-[#e0c97c] rounded-lg p-2 text-xs text-[#5b4636] mt-2">
-                                Example: "faceb00k.com" instead of "facebook.com"
+                                Example: &quot;faceb00k.com&quot; instead of &quot;facebook.com&quot;
                             </div>
                         </div>
                     </div>
