@@ -6,29 +6,39 @@ import { motion } from 'framer-motion';
 import TopNav from '~/components/TopNav';
 import Footer from '~/components/Footer';
 
-
-// data for the tipu cards
+/**
+ * data structure for tipu cards
+ * each card represents a warning sign with a letter and explanation
+ * the acronym tipu translates to "lie" in bahasa malaysia
+ * these cards help users identify common phishing tactics
+ */
 const tipuData = [
   {
     letter: 'T',
-    malay: 'Tidak akan rugi',
+    malay: 'Too good to be true',
   },
   {
     letter: 'I',
-    malay: 'Indah khabar dari rupa',
+    malay: 'Immediate action required',
   },
   {
     letter: 'P',
-    malay: 'Peluang hanya sekali',
+    malay: 'Promised guaranteed profits',
 
   },
   {
     letter: 'U',
-    malay: 'Untung besar',
+    malay: 'Unbelievable rewards',
 
   },
 ];
 
+/**
+ * main page component for the decode danger feature
+ * offers an interactive phishing simulator and educational content
+ * designed to teach users how to identify and avoid scams
+ * includes animated elements for engaging user experience
+ */
 export default function DecodeDangerPage() {
 
   return (
@@ -42,11 +52,13 @@ export default function DecodeDangerPage() {
         fontFamily: 'var(--font-sniglet)',
       }}
     >
+      {/* navigation component at the top of the page */}
       <TopNav />
-      
-      {/* main content */}
+
+      {/* main content section with all educational materials */}
       <section className="p-8">
         <div className="text-center">
+          {/* attention-grabbing header with animation and link */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -67,13 +79,13 @@ export default function DecodeDangerPage() {
             </h2>
 
             <p className="text-md md:text-lg text-[#5b4636] text-center">
-              Try our <strong>Phishing Simulator 🎣</strong> 🎣 to know if you can evade it!
+              Try our <strong>Phishing Simulator</strong> 🎣 to know if you can evade it!
             </p>
           </motion.div>
-          
-          {/* simulator and side panels layout */}
+
+          {/* three-panel layout for simulator and help content */}
           <div className="mt-12 flex flex-col md:flex-row gap-16 justify-center items-stretch">
-            {/* left panel with steps */}
+            {/* left panel with numbered instructions */}
             <motion.div
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
@@ -82,29 +94,39 @@ export default function DecodeDangerPage() {
             >
               <h3 className="text-xl text-[#ffffff] font-bold mb-4 text-center">Steps to use</h3>
               <ol className="text-[#FEEAD3] text-left space-y-3 flex-grow">
-                <li className="flex items-start">
-                  <span className="font-bold mr-2">1.</span> 
-                  <span>Start a conversation with the fake scholarship officer</span>
+
+                {/* step 1 - start conversation */}
+                <li className="flex items-start justify-between">
+                  <span className="font-bold mr-2">1.</span>
+                  <span className="text-justify flex-1">Start a conversation with the fake scholarship officer</span>
                 </li>
-                <li className="flex items-start">
-                  <span className="font-bold mr-2">2.</span> 
-                  <span>They&apos;ll ask for your personal details</span>
+
+                {/* step 2 - personal details request */}
+                <li className="flex items-start justify-between">
+                  <span className="font-bold mr-2">2.</span>
+                  <span className="text-justify flex-1">They&apos;ll ask for your personal details</span>
                 </li>
-                <li className="flex items-start">
-                  <span className="font-bold mr-2">3.</span> 
-                  <span>Decide how much information to share</span>
+
+                {/* step 3 - decide what to share */}
+                <li className="flex items-start justify-between">
+                  <span className="font-bold mr-2">3.</span>
+                  <span className="text-justify flex-1">Decide how much information to share. Feel free to make up fake names and info to simulate your response safely</span>
                 </li>
-                <li className="flex items-start">
+
+                {/* step 4 - get feedback */}
+                <li className="flex items-start justify-between">
                   <span className="font-bold mr-2">4.</span>
-                  <span>After 3 messages, you&apos;ll get feedback on how well you did</span>
+                  <span className="text-justify flex-1">After 3 messages, you&apos;ll get feedback on how well you did</span>
                 </li>
               </ol>
+
+              {/* privacy notice at bottom of instructions */}
               <div className="mt-4 text-center">
-                <span className="text-sm italic text-[#FEEAD3]">Remember: Be cautious with your information!</span>
+                <span className="text-sm italic text-[#FEEAD3]">This simulator uses AI to evaluate your responses. No data is stored.</span>
               </div>
             </motion.div>
-            
-            {/* center panel with simulator */}
+
+            {/* center panel containing the actual simulator component */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -113,46 +135,48 @@ export default function DecodeDangerPage() {
             >
               <PhishingSimulator />
             </motion.div>
-            
-            {/* right panel with tipu cards */}
+
+            {/* right panel with educational tipu flip cards */}
             <motion.div
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
               className="bg-[#8F6854] border-2 border-[#DDA175] p-5 rounded-xl shadow-md md:w-64 flex flex-col"
             >
-              <h3 className="text-xl text-[#ffffff] font-bold mb-4 text-center">Warning Signs</h3>
-              
-              {/* flip cards container */}
+              <h3 className="text-xl text-[#ffffff] font-bold mb-4 text-center">🚨Warning Signs🚨</h3>
+              <h5 className="text-m text-[#e9a95f] font-bold mb-4 text-center">TIPU means LIE in Bahasa Malaysia!</h5>
+
+              {/* container for the interactive flip cards */}
               <div className="flex flex-col items-center space-y-8">
+                {/* map through the tipu data to create a card for each item */}
                 {tipuData.map((item) => (
-                  <div 
+                  <div
                     key={item.letter}
                     className="flip-card w-24 h-24"
                   >
                     <div className="flip-card-inner">
-                      {/* front of card */}
+                      {/* front side shows just the letter */}
                       <div className="flip-card-front bg-[#e9a95f] rounded-xl flex items-center justify-center">
                         <span className="text-white text-5xl font-bold">{item.letter}</span>
                       </div>
-                      
-                      {/* back of card */}
+
+                      {/* back side reveals the meaning */}
                       <div className="flip-card-back bg-[#f0b574] rounded-xl flex flex-col items-center justify-center p-3">
                         <p className="text-[#5b4636] font-semibold text-sm leading-tight">{item.malay}</p>
-   
                       </div>
                     </div>
                   </div>
                 ))}
-                
+
+                {/* user instruction for the flip cards */}
                 <div className="text-center text-[#FEEAD3] text-sm italic mt-2">
                   <p>Hover over each letter to see details</p>
                 </div>
               </div>
             </motion.div>
           </div>
-          
-          {/* info box at the bottom */}
+
+          {/* bottom info box with safety tips and reminders */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -163,18 +187,19 @@ export default function DecodeDangerPage() {
             <p className="text-[#5b4636] mb-4">
               Remember, legitimate organizations will never pressure you to share personal information through casual messages. Always verify the sender through official channels before sharing any personal details.
             </p>
- 
           </motion.div>
         </div>
       </section>
-      
-      {/* styles for the flip cards */}
+
+      {/* css styles for the interactive flip card animation */}
       <style jsx>{`
+        /* container for the 3d perspective effect */
         .flip-card {
           perspective: 1000px;
           cursor: pointer;
         }
         
+        /* inner container that handles the rotation */
         .flip-card-inner {
           position: relative;
           width: 100%;
@@ -185,10 +210,12 @@ export default function DecodeDangerPage() {
           box-shadow: 0 4px 8px rgba(0,0,0,0.1);
         }
         
+        /* trigger the flip animation on hover */
         .flip-card:hover .flip-card-inner {
           transform: rotateY(180deg);
         }
         
+        /* shared styles for both sides of the card */
         .flip-card-front, .flip-card-back {
           position: absolute;
           width: 100%;
@@ -197,12 +224,16 @@ export default function DecodeDangerPage() {
           backface-visibility: hidden;
         }
         
+        /* position the back face reversed so it's hidden until flipped */
         .flip-card-back {
           transform: rotateY(180deg);
         }
       `}</style>
 
+      {/* spacer to push footer to bottom */}
       <div className="flex-grow" />
+
+      {/* page footer component */}
       <Footer />
     </main>
   );

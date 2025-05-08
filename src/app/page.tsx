@@ -9,7 +9,7 @@ const items = [
   {
     id: "magic_feather",
     label: "Magic Feather",
-    message: "TEST your instincts — every answer brings you closer to the truth.",
+    message: "TEST how well you'd handle common online traps teens face",
     img: "/main/magic_feather2.png",
     position: "left",
     top: "64%",
@@ -18,7 +18,7 @@ const items = [
   {
     id: "guardian_book",
     label: "Guardian Book",
-    message: "EDUCATE your mind — the book holds secrets to protect your world.",
+    message: "EDUCATE yourself on studying smart online - it's not as boring as it sounds",
     img: "/main/guardian_book.png",
     position: "right",
     top: "73%",
@@ -27,7 +27,7 @@ const items = [
   {
     id: "crystal_orb",
     label: "Crystal Orb",
-    message: "CHECK what’s hidden — the orb reveals dangers beneath the surface.",
+    message: "CHECK if your email or password is really safe",
     img: "/main/crystal_orb.png",
     position: "left",
     top: "81%",
@@ -112,11 +112,15 @@ export default function MainPage() {
           exit={{ opacity: 0 }}
           transition={{ duration: 1 }}
           className="absolute top-1/15 left-2/7 -translate-x-1/2 text-center z-20"
+          style={{ fontFamily: "var(--font-sniglet)" }}
         >
-          <h1 className="text-5xl font-bold text-yellow-100 drop-shadow-lg" style={{ fontFamily: "var(--font-sniglet)" }}>
+          <h1 className="text-5xl font-bold text-yellow-100 drop-shadow-lg">
             The Enchanted Forest Beckons
           </h1>
-          <p className="text-lg text-yellow-200 mt-2 max-w-md mx-auto" style={{ fontFamily: "var(--font-sniglet)" }}>
+          <p className="text-2xl text-yellow-200 mt-2 max-w-md mx-auto">
+            Ready to level up your cyber smarts?
+          </p>
+          <p className="text-lg text-yellow-200 mt-2 max-w-md mx-auto">
             Gather the tools of wisdom: CHECK, EDUCATE, and TEST before the castle doors unlock.
           </p>
         </motion.div>
@@ -214,7 +218,7 @@ export default function MainPage() {
                   : "-left-4 border-r-8 border-r-yellow-700"
                   }`}
               ></div>
-              <div className="text-md font-medium" style={{ fontFamily: "var(--font-sniglet)" }}>
+              <div className="text-md font-medium text-center" style={{ fontFamily: "var(--font-sniglet)" }}>
                 {items.find((i) => i.id === activeItem)?.message}
               </div>
               <button

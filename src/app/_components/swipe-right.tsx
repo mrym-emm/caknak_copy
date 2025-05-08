@@ -19,7 +19,7 @@ const SwipeRight = () => {
   return (
     <div className="data-breach-container">
       {/* only show the title when we haven't expanded yet */}
-      {!isExpanded && <h2 className="unlock-title">Unlock to level up</h2>}
+      {!isExpanded && <h2 className="unlock-title">Click unlock to level up</h2>}
       
       {!isExpanded ? (
         // the swipe container with button shows when not expanded
@@ -36,7 +36,7 @@ const SwipeRight = () => {
         <div className="expanded-content">
           {/* embedded game from itch.io */}
           <iframe
-            src="https://itch.io/embed-upload/13558716?color=333333"
+            src="https://itch.io/embed-upload/13617564?color=333333"
             allowFullScreen
             style={{
               width: '640px',

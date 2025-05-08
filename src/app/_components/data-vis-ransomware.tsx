@@ -1,18 +1,25 @@
+// all imports, including css files and components
 import React, { useEffect, useState } from 'react';
 import { createClient } from '@supabase/supabase-js';
 import type { SupabaseClient } from '@supabase/supabase-js';
-import { Tooltip } from 'react-tooltip'; // using v5
+import { Tooltip } from 'react-tooltip';               
+import 'react-tooltip/dist/react-tooltip.css'; 
+import SwipeRight from './swipe-right';
+import './data-vis-ransomware.css';
 
-// custom swipe component for navigation
-import SwipeRight from '~/app/_components/swipe-right';
-import './swipe-right.css';
-
-
-// types for our data structures
+/**
+ * types for data structures used throughout the component
+ * 
+ * ransomware attack represents a single incident with id, date, and country info
+ * week helps track calendar weeks for our heatmap
+ * weekdata stores attack counts and label info for each week
+ * heatmapbymonth organizes week data by month name
+ * statcardprops defines what info each stat card needs to display
+ */
 interface RansomwareAttack {
   id: number;
   published: string;
-  // other fields we might use later
+  country_code: string;
 }
 
 interface Week {
@@ -37,142 +44,83 @@ interface StatCardProps {
   emoji: string;
   label: string;
   count: number;
-  source?: string;      // country code for victim data
+  source?: string;
+  description?: string;
 }
 
-// css-in-js for our dashboard ui
-// using ancient scroll/parchment theme with ochre/sienna color palette
-const styles = {
-  container: {
-    padding: '2rem',
-    maxWidth: '1200px',
-    margin: '0 auto',
-  },
-  cardContainer: {
-    display: 'flex',
-    flexWrap: 'wrap',
-    gap: '1rem',
-    marginTop: '2rem',
-    justifyContent: 'center',
-  },
-  card: {
-    flex: '1 0 200px',
-    background: '#f1f1f1',
-    borderRadius: '12px',
-    padding: '1.5rem',
-    textAlign: 'center',
-    boxShadow: '0 4px 8px rgba(0,0,0,0.1)',
-  },
-  cardEmoji: { fontSize: '2rem', marginBottom: '0.5rem' },
-  cardTitle: { margin: '0.5rem 0', fontWeight: 'bold' },
-  cardValue: { fontSize: '1.8rem', color: '#2e7d32' },
-  cardSource: {
-    marginTop: '0.5rem',
-    fontWeight: 'bold',
-    fontSize: '0.9rem',
-    color: '#777777',
-  },
-  heatmapSection: { marginTop: '3rem' },
-  heatmapTitle: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: '1.5rem',
-    marginTop: '2rem',
-    color: '#666',
-  },
-  heatmapRows: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '1.5rem',
-    alignItems: 'center',
-  },
-  heatmapRow: { display: 'flex', gap: '2rem', justifyContent: 'center' },
-  monthContainer: { display: 'flex', flexDirection: 'column', alignItems: 'center' },
-  monthLabel: { fontWeight: 'bold', color: '#fff', marginBottom: '0.5rem' },
-  weeksContainer: { display: 'flex', gap: '0.3rem' },
-  weekBox: {
-    width: '2rem',
-    height: '2rem',
-    borderRadius: '4px',
-    background: '#ebedf0',
-    cursor: 'pointer',
-    transition: 'transform 0.1s ease',
-  },
-  weekLabel: { fontSize: '0.7rem', textAlign: 'center', color: '#fff', marginTop: '0.2rem' },
-  emptyWeek: { background: '#ebedf0' },
-  level1: { background: '#f4e0c1' }, // light parchment-peach
-  level2: { background: '#e8c69d' }, // warm sand
-  level3: { background: '#dcaa72' }, // amber ochre
-  level4: { background: '#c4884c' }, // burnt sienna / deep rust
+// shorthand month names for more compact display
+const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 
-  // dark wood background for the heatmap
-  heatmapWrapper: {
-    backgroundColor: '#3b2a1a',
-    borderRadius: '12px',
-    padding: '1rem',
-    color: '#fff',
-    marginTop: '1rem',
-  },
-} as const;
+// lookup table to convert country codes to full country names for asean countries
+const countries: Record<string, string> = {
+  MY: 'Malaysia', SG: 'Singapore', ID: 'Indonesia', TH: 'Thailand',
+  PH: 'Philippines', VN: 'Vietnam', BN: 'Brunei', MM: 'Myanmar',
+  KH: 'Cambodia', LA: 'Laos',
+};
 
-// database connection config
+// supabase connection info for accessing the ransomware database
+// these are read-only credentials to fetch the attack data
 const supabaseUrl = "https://ektqafpmakngeshistpk.supabase.co";
 const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVrdHFhZnBtYWtuZ2VzaGlzdHBrIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc0NDg2NTMxNCwiZXhwIjoyMDYwNDQxMzE0fQ.YhCIciKYk6_oOvSYPSmXeKj9MMwMXM7Wq9ricgbrADE";
 const supabase: SupabaseClient = createClient(supabaseUrl, supabaseKey);
 
-// card component for displaying stats with emoji icon
-const StatCard: React.FC<StatCardProps> = ({ emoji, label, count, source = 'US' }) => {
-  let iconElement: React.ReactNode;
-  switch (label) {
-    case "Victims":
-      iconElement = <div style={styles.cardEmoji}>⚔️</div>;
-      break;
-    case "This Month":
-      iconElement = <div style={styles.cardEmoji}>🌕</div>;
-      break;
-    case "This Year":
-      iconElement = <div style={styles.cardEmoji}>☀️</div>;
-      break;
-    default:
-      iconElement = <div style={styles.cardEmoji}>{emoji}</div>;
-  }
+/**
+ * stat card component to display key metrics with emoji icons
+ * shows things like total victims, monthly counts, etc.
+ * can also show a description and source attribution
+ */
+const StatCard: React.FC<StatCardProps> = ({ emoji, label, count, source = 'US', description }) => {
+  // pick the right emoji based on what type of stat this is
+  const icon =
+    label === 'Victims Since 2020' ? '⚔️' :
+    label === 'This Month' ? '🌕' :
+    label === 'This Year' ? '☀️' : emoji;
 
   return (
-    <div style={styles.card}>
-      {iconElement}
-      <h3 style={styles.cardTitle}>{label}</h3>
-      <p style={styles.cardValue}>{count}</p>
-
-      {label === "Victims" && (
-        <p style={styles.cardSource}>
-          Latest: {source}
-        </p>
-      )}
+    <div className="stat-card">
+      <div className="stat-card__emoji">{icon}</div>
+      <h3 className="stat-card__title">{label}</h3>
+      <p className="stat-card__value">{count}</p>
+      {label === 'Victims Since 2020' && <p className="stat-card__source">Latest: {source}</p>}
+      {description && <p className="stat-card__description">{description}</p>}
     </div>
   );
 };
 
-// calculates which week number within the month (1-5) a date falls on
+/**
+ * helper function to figure out which week of the month a date falls in
+ * this makes our heatmap labels more user-friendly
+ */
 const getWeekOfMonth = (d: Date) =>
   Math.ceil((d.getDate() + new Date(d.getFullYear(), d.getMonth(), 1).getDay()) / 7);
 
-// formats a date as "Mon W#" (e.g., "Jan W2")
+/**
+ * formats a date into "Month W#" format (like "Jan W1")
+ * used as labels in our heatmap visualization
+ */
 const formatMonthWeek = (d: Date) =>
-  `${['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][d.getMonth()]} W${getWeekOfMonth(d)}`;
+  `${months[d.getMonth()]} W${getWeekOfMonth(d)}`;
 
-// generates all weeks for a given year as structured objects
+/**
+ * generates all the weeks for a given year
+ * this creates the structure for our heatmap even for weeks with no attacks
+ * ensures consistent display with proper week numbering throughout the year
+ */
 const getAllWeeksInYear = (year: number): Week[] => {
   const weeks: Week[] = [];
+  // start with the first sunday of the year (or last sunday of previous year)
   const curr = new Date(year, 0, 1);
-  // adjust to start of week (sunday)
   while (curr.getDay() !== 0) curr.setDate(curr.getDate() - 1);
+  
+  // keep adding weeks until we go past the end of the requested year
   while (curr.getFullYear() <= year) {
     const start = new Date(curr);
     const mid = new Date(curr);
-    mid.setDate(mid.getDate() + 3);
-    curr.setDate(curr.getDate() + 6);
+    mid.setDate(mid.getDate() + 3); // use wednesday (day 3) as middle of week for more accurate month labeling since some weeks cross month boundaries
+    curr.setDate(curr.getDate() + 6); // go to saturday to complete the week, needed to properly calculate week ranges
     const end = new Date(curr);
+    
+    // only include weeks that overlap with the requested year
     if (end.getFullYear() >= year && start.getFullYear() <= year) {
       weeks.push({
         start,
@@ -182,76 +130,83 @@ const getAllWeeksInYear = (year: number): Week[] => {
         weekOfMonth: getWeekOfMonth(mid),
       });
     }
-    curr.setDate(curr.getDate() + 1);
+    curr.setDate(curr.getDate() + 1); // move to next sunday
   }
   return weeks;
 };
 
-// main dashboard component
+/**
+ * main component that fetches and displays ransomware attack data
+ * includes stat cards and a visual heatmap of attack frequency
+ */
 const DataVis: React.FC = () => {
+  // state to store the raw attack data and processed heatmap data
   const [ransomData, setRansomData] = useState<RansomwareAttack[]>([]);
   const [heatmapByMonth, setHeatmapByMonth] = useState<HeatmapByMonth>({});
   const [isLoading, setIsLoading] = useState(true);
 
-  // fetch data from supabase on component mount
+  /**
+   * extracts the most recent attack's country and formats it for display
+   * helps show which country was most recently affected
+   */
+  const getLatestCountry = (data: RansomwareAttack[]) => {
+    if (data.length === 0) return 'N/A';
+    const code = data[0]?.country_code ?? 'Unknown';
+    return countries[code] ?? code;
+  };
+
+  // fetch data when component loads
   useEffect(() => {
+    // properly handle the promise with void operator
     void (async () => {
-      // fetch all ransomware attacks, sorted by date (newest first)
       const { data, error } = await supabase
         .from('asean_ransomware')
         .select('*')
         .order('published', { ascending: false });
-  
-      if (error) {
-        console.error('fetch error:', error);
-        return;
-      }
-  
+      if (error) return console.error(error);
       if (data) {
-        // cast to our type
         const rows = data as RansomwareAttack[];
         setRansomData(rows);
         processWeeklyData(rows);
       }
     })();
   }, []);
-  
-  // transform raw data into weekly heatmap format
+
+  /**
+   * converts raw attack data into structured weekly heatmap format
+   * organizes counts of attacks by week and month for the heatmap
+   * adds placeholder weeks when needed for consistent display
+   */
   const processWeeklyData = (data: RansomwareAttack[]) => {
     const year = new Date().getFullYear();
     const allWeeks = getAllWeeksInYear(year);
-    const map: Record<string, number> = {};
-    allWeeks.forEach(wk => (map[wk.label] = 0));
-
-    // count attacks per week
+    
+    // initialize counts for all weeks of the year
+    const counts: Record<string, number> = {};
+    allWeeks.forEach(wk => { counts[wk.label] = 0; });
+    
+    // count attacks for each week
     data.forEach(item => {
-      if (item.published) {
-        const d = new Date(item.published);
-        if (d.getFullYear() === year) {
-          const key = formatMonthWeek(d);
-          map[key] = (map[key] ?? 0) + 1;
-        }
+      const d = new Date(item.published);
+      if (d.getFullYear() === year) {
+        const key = formatMonthWeek(d);
+        counts[key] = (counts[key] ?? 0) + 1;
       }
     });
-
-    const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    
+    // organize the data by month for the heatmap
     const result: HeatmapByMonth = {};
-
-    // organize by month for the heatmap display
     months.forEach(mn => {
-      const weeksForMonth = allWeeks
-        .filter(wk => wk.label.startsWith(mn))
-        .sort((a, b) => a.weekOfMonth - b.weekOfMonth)
-        .slice(0, 4);
-
+      // find weeks for this month, sorted by week number, max 4 weeks per month
+      const weeksForMonth = allWeeks.filter(wk => wk.label.startsWith(mn)).sort((a,b) => a.weekOfMonth - b.weekOfMonth).slice(0,4);
       result[mn] = weeksForMonth.map(wk => ({
         label: `W${wk.weekOfMonth}`,
-        count: map[wk.label] ?? 0,
+        count: counts[wk.label] ?? 0,
         fullLabel: wk.label,
         dates: `${wk.start.toLocaleDateString()} - ${wk.end.toLocaleDateString()}`,
       }));
-
-      // ensure each month has exactly 4 weeks for consistent display
+      
+      // add placeholder weeks if needed to ensure each month has 4 weeks
       while (result[mn].length < 4) {
         const idx = result[mn].length + 1;
         result[mn].push({
@@ -263,12 +218,15 @@ const DataVis: React.FC = () => {
         });
       }
     });
-
+    
     setHeatmapByMonth(result);
     setIsLoading(false);
   };
 
-  // count incidents from current month
+  /**
+   * counts attacks for the current month only
+   * used for the "this month" stat card
+   */
   const getThisMonthCount = (data: RansomwareAttack[]) =>
     data.filter(i => {
       if (!i.published) return false;
@@ -279,51 +237,67 @@ const DataVis: React.FC = () => {
       );
     }).length;
 
-  // count incidents from current year
+
+  /**
+   * counts attacks for the current year only
+   * used for the "this year" stat card
+   */
   const getThisYearCount = (data: RansomwareAttack[]) =>
-    data.filter(i =>
-      i.published
-        ? new Date(i.published).getFullYear() === new Date().getFullYear()
-        : false
-    ).length;
+    data.filter(i => new Date(i.published).getFullYear() === new Date().getFullYear()).length;
 
-  // determine heatmap color based on incident count
-  // more attacks = darker color on our ochre scale
-  const getColorClass = (count: number) =>
-    count === 0
-      ? styles.emptyWeek
-      : count > 10
-      ? styles.level4
-      : count > 5
-      ? styles.level3
-      : count > 2
-      ? styles.level2
-      : styles.level1;
+  /**
+   * determines the css class to apply based on attack count
+   * creates the color gradient for the heatmap visualization from css files
+   */
+  const getWeekLevelClass = (count: number) => {
+    if (count === 0) return 'week-empty';
+    if (count > 10) return 'week-level-4';
+    if (count > 5) return 'week-level-3';
+    if (count > 2) return 'week-level-2';
+    return 'week-level-1';
+  };
 
-  // creates the two-row horizontal heatmap
-  // top row is jan-jun, bottom row is jul-dec
+  /**
+   * renders the main heatmap visualization
+   * this function creates the visual calendar grid showing attack frequency
+   * 
+   * the heatmap is organized as:
+   * - two rows of months (jan-jun and jul-dec) for better screen space usage
+   * - each month shows 4 weeks as colored boxes
+   * - each week box is colored based on attack count
+   */
   const renderHorizontalHeatmap = () => {
-    const months = Object.keys(heatmapByMonth);
-    const firstRow = months.slice(0, 6);
-    const secondRow = months.slice(6);
-
+    // split 12 months into two rows of 6 for better layout on different screen sizes
+    const firstRow = months.slice(0,6);    // jan through jun
+    const secondRow = months.slice(6);     // jul through dec
+    
     return (
-      <div style={styles.heatmapRows}>
-        {[firstRow, secondRow].map((row, ri) => (
-          <div key={ri} style={styles.heatmapRow}>
+      <>
+        {/* create two separate rows of months */}
+        {[firstRow, secondRow].map((row, idx) => (
+          <div key={idx} className="heatmap-row">
+            {/* for each month in this row */}
             {row.map(mn => (
-              <div key={mn} style={styles.monthContainer}>
-                <div style={styles.monthLabel}>{mn}</div>
-                {/* weeks container for this month */}
-                <div style={styles.weeksContainer}>
-                  {(heatmapByMonth[mn] ?? []).map((wk, idx) => (
-                    <div key={idx}>
+              <div key={mn} className="month-container">
+                {/* display month name at top */}
+                <div className="month-label">{mn}</div>
+                
+                {/* container for all weeks in this month */}
+                <div className="weeks-container">
+                  {/* get weeks for this month or use empty array if none found */}
+                  {/* each month should have exactly 4 weeks (real or placeholder) */}
+                  {(heatmapByMonth[mn] ?? []).map((wk, i) => (
+                    <div key={i}>
+                      {/* the colored box representing a week */}
+                      {/* color depends on number of attacks via css class */}
                       <div
-                        style={{ ...styles.weekBox, ...getColorClass(wk.count) }}
-                        data-tooltip-id="heatmap-tooltip"
-                        data-tooltip-content={`${wk.fullLabel}: ${wk.count} attacks`}
-                      />
-                      <div style={styles.weekLabel}>{wk.label}</div>
+                     className={`week-box ${getWeekLevelClass(wk.count)}`}
+                     data-tooltip-id="heatmap-tooltip"
+                     data-tooltip-content={`${wk.fullLabel}: ${wk.count} attacks`}
+                     data-tooltip-place="top"                  // ← ensure it shows above
+                  />
+                      {/* label below each box (W1, W2, etc) */}
+                      <div className="week-label">{wk.label}</div>
                     </div>
                   ))}
                 </div>
@@ -331,37 +305,42 @@ const DataVis: React.FC = () => {
             ))}
           </div>
         ))}
-      </div>
+      </>
     );
   };
 
+  /**
+   * main render function for the entire component
+   * includes title, stat cards, heatmap
+   */
   return (
-    <div style={styles.container}>
+    <div className="data-vis-container">
+      <Tooltip id="heatmap-tooltip" />
+      {/* main title banner with warning emoji, had to use inline styling to force a specific style */}
       <h1
         style={{
           display: 'block',
           width: 'fit-content',
-          margin: '1rem auto 0',
+          margin: '0.5rem auto 0',
           backgroundColor: 'rgba(255,255,255,0.75)',
           padding: '0.5rem 0.5rem',
           borderRadius: '0.25rem',
         }}
         className="text-4xl text-[#5b4636] tracking-wide uppercase"
       >
-        {/* main title banner with warning emoji */}
         ⚠️ASEAN RANSOMWARE ATTACKS⚠️
       </h1>
-
-      {/* stat cards */}
-      <div style={styles.cardContainer}>
-        <StatCard emoji="🌕" label="This Month" count={getThisMonthCount(ransomData)} />
-        {/* pass source="MY" or whatever country code you want */}
-        <StatCard emoji="⚔️" label="Victims" count={ransomData.length} source="MY" />
-        <StatCard emoji="☀️" label="This Year" count={getThisYearCount(ransomData)} />
+      
+      {/* stats section with three key metrics about attacks */}
+      <div className="card-container">
+        <StatCard emoji="🌕" label="This Month" count={getThisMonthCount(ransomData)} description="Ransomware attacks reported in ASEAN this month" />
+        <StatCard emoji="⚔️" label="Victims Since 2020" count={ransomData.length} source={getLatestCountry(ransomData)} />
+        <StatCard emoji="☀️" label="This Year" count={getThisYearCount(ransomData)} description="Ransomware incidents recorded across ASEAN in 2025" />
       </div>
-
-      {/* heatmap */}
-      <div style={styles.heatmapSection}>
+      
+      {/* heatmap visualization section */}
+      <div className="heatmap-section">
+        {/* section title for the heatmap */}
         <h3
           style={{
             display: 'block',
@@ -374,155 +353,64 @@ const DataVis: React.FC = () => {
           }}
           className="text-2xl tracking-wide uppercase"
         >
-          {/* section title for the heatmap */}
           🏹 Weekly Attack Heatmap 🏹
         </h3>
-
+        
+        {/* loading state or rendered heatmap */}
         {isLoading ? (
-          // show loading indicator while data is being fetched
-          <div style={{ textAlign: 'center', padding: '2rem' }}>
-            loading heatmap data...
-          </div>
+          <p className="intro-text">loading heatmap data...</p>
         ) : (
-          <div style={styles.heatmapWrapper}>
+          <div className="heatmap-wrapper">
             {renderHorizontalHeatmap()}
             <Tooltip id="heatmap-tooltip" />
+            
+            {/* data source attribution with link */}
             <p
-      style={{
-        textAlign: 'center',
-        marginTop: '1rem',
-        fontSize: '14px',
-        color: '#dcdcdc',
-        fontStyle: 'italic',
-      }}
-    >
-      {/* data source attribution with link */}
-      Live data sourced from{' '}
-      <a
-        href="https://ransomware.live"
-        target="_blank"
-        rel="noopener noreferrer"
-        style={{ color: '#ffd966', textDecoration: 'underline' }}
-      >
-        Ransomware.live
-      </a>
-    </p>
-  </div>
-)}
-
-<style>
-  {`
-    /* animations for text elements to fade in from bottom */
-    @keyframes fadeInUp {
-      from {
-        opacity: 0;
-        transform: translateY(20px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    .animated-text {
-      animation: fadeInUp 0.8s ease-out both;
-    }
-
-    /* staggered timing for sequential animations */
-    .animated-delay-1 { animation-delay: 0.2s; }
-    .animated-delay-2 { animation-delay: 0.4s; }
-    .animated-delay-3 { animation-delay: 0.6s; }
-  `}
-</style>
-
-
-<p
-  className="animated-text animated-delay-1"
-  style={{
-    maxWidth: '800px',
-    margin: '2rem auto 0',
-    textAlign: 'center',
-    color: '#5b4636',
-    fontSize: '20px',
-    lineHeight: '1.6',
-  }}
->
-{/* intro text with link to ransomware explanation */}
-<a 
-    href="https://www.youtube.com/watch?v=e_CrzLvDHI8" 
-    target="_blank" 
-    style={{ textDecoration: 'underline', color: '#c25d5d', fontWeight: 'bold' }}
-  >
-    Ransomware
-  </a> is just one threat in Southeast Asia&apos;s growing cybercrime landscape.
-</p>
-
-<p
-  className="animated-text animated-delay-2"
-  style={{
-    maxWidth: '800px',
-    margin: '2rem auto 0',
-    textAlign: 'center',
-    color: '#fefae0', // light brwon
-    backgroundColor: '#66492d', // deep brown
-    fontSize: '30px',
-    lineHeight: '1.6',
-    padding: '0.5rem 1rem',
-    borderRadius: '8px',
-    width: 'fit-content',
-    fontWeight: '600',
-  }}
->
-  {/* highlighted question to draw attention */}
-  But what about the others?
-</p>
-<p
-  className="animated-text animated-delay-3"
-  style={{
-    maxWidth: '600px',
-    margin: '2rem auto 0',
-    textAlign: 'center',
-    color: '#5b4636',
-    fontSize: '25px',
-    lineHeight: '1.6',
-  }}
->
-  {/* call to action introducing the interactive story */}
-  Step into our interactive story with real Malaysian cybercrime data so you can better:
-</p>
-
-
-
-        <div
-  style={{
-    display: 'flex',
-    justifyContent: 'center',
-    gap: '2rem',
-    marginTop: '1.5rem',
-    flexWrap: 'wrap',
-  }}
->
-  {/* three key benefits displayed as icons with text */}
-  <div style={{ fontWeight: 'bold', color: '#5b4636', fontSize: '1.5rem' }}>
-    🔍 Spot Danger
-  </div>
-  <div style={{ fontWeight: 'bold', color: '#5b4636', fontSize: '1.5rem' }}>
-    🧠 Make Choices
-  </div>
-  <div style={{ fontWeight: 'bold', color: '#5b4636', fontSize: '1.5rem' }}>
-    🛡️ Level Up
-  </div>
-</div>
+              style={{
+                textAlign: 'center',
+                marginTop: '1rem',
+                fontSize: '14px',
+                color: '#dcdcdc',
+                fontStyle: 'italic',
+              }}
+            >
+              Live data sourced from{' '}
+              <a
+                href="https://ransomware.live"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ color: '#ffd966', textDecoration: 'underline' }}
+              >
+                Ransomware.live
+              </a>
+            </p>
+          </div>
+        )}
+        
+        {/* animated intro text to introduce ransomware */}
+        <p className="intro-text animated-text animated-delay-1">
+          <a href="https://www.youtube.com/shorts/QHguF0rWamc" target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'underline', color: '#c25d5d', fontWeight: 'bold' }}>
+            Ransomware
+          </a> is just one threat in Southeast Asia&apos;s growing cybercrime landscape.
+        </p>
+        <p className="highlight-text animated-text animated-delay-2">
+          But what about the others?
+        </p>
+        <p className="call-text animated-text animated-delay-3">
+          Step into our interactive story with real Malaysian cybercrime data so you can better:
+        </p>
+        
+        {/* benefits list that shows what users will gain */}
+        <div className="benefits-container">
+          <div className="benefit-item">🔍 Spot Danger</div>
+          <div className="benefit-item">🧠 Make Choices</div>
+          <div className="benefit-item">🛡️ Level Up</div>
+        </div>
       </div>
-      <div style={{ marginTop: '4rem' }}>
-    {/* user will unlock before playng game*/}
-    <SwipeRight />
-  </div>
       
+      {/* navigation component that helps users move to next screen */}
+      <div style={{ marginTop: '0.5rem' }}><SwipeRight /></div>
     </div>
-
-
-
   );
 };
 

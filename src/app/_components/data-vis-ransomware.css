@@ -1,0 +1,131 @@
+/* Container */
+.data-vis-container {
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  /* Card grid */
+  .card-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-top: 2rem;
+    justify-content: center;
+  }
+  
+  /* Individual card */
+  .stat-card {
+    flex: 1 0 200px;
+    background: #f1f1f1;
+    border-radius: 12px;
+    padding: 1.5rem;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  }
+  .stat-card__emoji {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+  }
+  .stat-card__title {
+    margin: 0.5rem 0;
+    font-weight: bold;
+  }
+  .stat-card__value {
+    font-size: 1.8rem;
+    color: #2e7d32;
+  }
+  .stat-card__source,
+  .stat-card__description {
+    margin-top: 0.5rem;
+    font-weight: bold;
+    font-size: 0.9rem;
+    color: #777777;
+  }
+  
+  /* Heatmap section */
+  .heatmap-section {
+    margin-top: 3rem;
+  }
+  .heatmap-title {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 2rem auto 1.5rem;
+    color: #666;
+  }
+  .heatmap-rows {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    align-items: center;
+  }
+  .heatmap-row {
+    display: flex;
+    gap: 2rem;
+    justify-content: center;
+  }
+  .month-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .month-label {
+    font-weight: bold;
+    color: #fff;
+    margin-bottom: 0.5rem;
+  }
+  .weeks-container {
+    display: flex;
+    gap: 0.3rem;
+  }
+  .week-box {
+    width: 2rem;
+    height: 2rem;
+    border-radius: 4px;
+    background: #ebedf0;
+    cursor: pointer;
+    transition: transform 0.1s ease;
+  }
+  .week-label {
+    font-size: 0.7rem;
+    text-align: center;
+    color: #fff;
+    margin-top: 0.2rem;
+  }
+  .week-empty { background: #ebedf0; }
+  .week-level-1 { background: #f4e0c1; }
+  .week-level-2 { background: #e8c69d; }
+  .week-level-3 { background: #dcaa72; }
+  .week-level-4 { background: #c4884c; }
+  
+  /* Heatmap wrapper */
+  .heatmap-wrapper {
+    background-color: #3b2a1a;
+    border-radius: 12px;
+    padding: 1rem;
+    color: #fff;
+    margin-top: 1rem;
+  }
+  
+  /* Animated text */
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .animated-text { animation: fadeInUp 0.8s ease-out both; }
+  .animated-delay-1 { animation-delay: 0.2s; }
+  .animated-delay-2 { animation-delay: 0.4s; }
+  .animated-delay-3 { animation-delay: 0.6s; }
+  
+  /* Intro & highlight texts */
+  .intro-text { max-width: 800px; margin: 2rem auto 0; text-align: center; color: #5b4636; font-size: 20px; line-height: 1.6; }
+  .highlight-text { max-width: 800px; margin: 2rem auto 0; text-align: center; color: #fefae0; background-color: #66492d; font-size: 30px; line-height: 1.6; padding: 0.5rem 1rem; border-radius: 8px; width: fit-content; font-weight: 600; }
+  .call-text { max-width: 600px; margin: 2rem auto 0; text-align: center; color: #5b4636; font-size: 25px; line-height: 1.6; }
+  
+  /* Benefits */
+  .benefits-container { display: flex; justify-content: center; gap: 2rem; margin-top: 1.5rem; flex-wrap: wrap; }
+  .benefit-item { font-weight: bold; color: #5b4636; font-size: 1.5rem; }
+  
+
+  
