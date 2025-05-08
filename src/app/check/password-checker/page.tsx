@@ -7,16 +7,22 @@ import TopNav from "~/components/TopNav";
 import Footer from "~/components/Footer";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 
-const calculateConfidence = (entropy: number) => {
-    if (entropy >= 4) return 1;
-    if (entropy <= 0) return 0;
-    return entropy / 4;
+const calculateRandomness = (entropy: number) => {
+    // Convert entropy to a percentage (0-100)
+    // Assuming entropy is typically between 0-4, we'll scale it to 0-100
+    return Math.min(Math.max((entropy / 4) * 100, 0), 100);
 };
 
-const getStrengthText = (confidence: number) => {
-    if (confidence < 0.40) return "Weak 🔴";
-    if (confidence < 0.75) return "Medium 🟠";
-    return "Strong 🟢";
+const getStrengthText = (strength: number) => {
+    if (strength === 0) return "Weak Password 🔴";
+    if (strength === 1) return "Medium Password 🟠";
+    return "Strong Password 🟢";
+};
+
+const getStrengthColor = (strength: number) => {
+    if (strength === 0) return "text-red-600";
+    if (strength === 1) return "text-yellow-600";
+    return "text-green-600";
 };
 
 const formatFeatureName = (name: string) => {
@@ -26,16 +32,11 @@ const formatFeatureName = (name: string) => {
         num_lower: "Lowercase Letters",
         num_digit: "Numbers",
         num_symbol: "Special Characters",
-        has_qwerty: "Keyboard Pattern",
-        has_123456: "Number Sequence",
-        entropy: "Complexity Score",
     };
     return map[name] ?? name;
 };
 
 const formatFeatureValue = (name: string, value: string | number) => {
-    if (name === "has_qwerty" || name === "has_123456") return value === 1 ? "Yes" : "No";
-    if (name === "entropy" && typeof value === "number") return value.toFixed(2);
     return value;
 };
 
@@ -65,14 +66,14 @@ export default function PasswordCheckPage() {
         }
     };
 
-    const confidence = calculateConfidence(result?.features.entropy ?? 0);
+    const randomness = calculateRandomness(result?.features.entropy ?? 0);
     const hasTips = result && (
         result.features.num_upper === 0 ||
         result.features.num_digit === 0 ||
         result.features.num_symbol === 0 ||
         result.features.length < 12 ||
-        result.features.has_qwerty === 1 ||
-        result.features.has_123456 === 1
+        result.features.has_password === 1 ||
+        result.features.has_admin === 1
     );
 
     return (
@@ -94,7 +95,7 @@ export default function PasswordCheckPage() {
                 </h1>
                 <p className="text-[#5b4636] max-w-lg mb-6">Enter a password to check its strength and get improvement tips.</p>
 
-                <div className="relative w-80">
+                <div className="relative w-96">
                     <input
                         type={showPassword ? "text" : "password"}
                         value={password}
@@ -127,39 +128,70 @@ export default function PasswordCheckPage() {
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
-                        className="mt-8 max-w-3xl w-full bg-[#f9f4e6] border-4 border-[#5b4636] rounded-lg shadow-lg p-6 text-left"
+                        className="mt-8 w-[90%] max-w-6xl bg-[#f9f4e6] border-4 border-[#5b4636] rounded-lg shadow-lg p-6 text-left"
                     >
-                        <h2 className="text-2xl font-bold text-[#5b4636] mb-1 text-center">
-                            Strength: {(confidence * 100).toFixed(0)}%
-                        </h2>
-                        <p className="text-xl font-semibold text-[#5b4636] mb-4 text-center">{getStrengthText(confidence)}</p>
+                        <motion.div
+                            initial={{ scale: 0.9, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 1 }}
+                            transition={{ duration: 0.3 }}
+                            className={`text-3xl font-bold text-center mb-6 ${getStrengthColor(result.strength)}`}
+                        >
+                            {getStrengthText(result.strength)}
+                        </motion.div>
 
-                        <div className="w-full h-4 bg-gray-200 rounded-full overflow-hidden mb-4">
-                            <div
-                                className="h-full bg-yellow-500 transition-all duration-500"
-                                style={{ width: `${(confidence * 100).toFixed(0)}%` }}
-                            />
-                        </div>
-
-                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 whitespace-nowrap">
-                            {Object.entries(result.features).map(([key, val]: [string, string | number]) => (
-                                <div key={key} className="bg-white/80 border-2 border-[#5b4636] rounded-lg p-3">
-                                    <div className="text-sm text-[#5b4636] font-medium">{formatFeatureName(key)}</div>
-                                    <div className="text-lg text-yellow-700 font-semibold">{formatFeatureValue(key, val)}</div>
+                        <div className="flex flex-col md:flex-row gap-6 mb-6">
+                            <div className="flex-1 bg-white/80 border-2 border-[#5b4636] rounded-lg p-4">
+                                <div className="flex items-center justify-between mb-2">
+                                    <span className="text-lg font-semibold text-[#5b4636]">Password Randomness</span>
+                                    <span className="text-2xl font-bold text-[#5b4636]">
+                                        {randomness.toFixed(0)}%
+                                    </span>
                                 </div>
-                            ))}
+                                <div className="w-full h-6 bg-gray-200 rounded-full overflow-hidden">
+                                    <motion.div
+                                        initial={{ width: 0 }}
+                                        animate={{ width: `${randomness.toFixed(0)}%` }}
+                                        transition={{ duration: 1, ease: "easeOut" }}
+                                        className="h-full bg-yellow-500"
+                                    />
+                                </div>
+                            </div>
+
+                            <div className="flex-1 grid grid-cols-3 gap-4">
+                                {Object.entries(result.features)
+                                    .filter(([key]) => ['length', 'num_upper', 'num_lower', 'num_digit', 'num_symbol'].includes(key))
+                                    .map(([key, val]: [string, string | number]) => (
+                                        <div key={key} className="bg-white/80 border-2 border-[#5b4636] rounded-lg p-3">
+                                            <div className="text-sm text-[#5b4636] font-medium">{formatFeatureName(key)}</div>
+                                            <div className="text-lg text-yellow-700 font-semibold">{formatFeatureValue(key, val)}</div>
+                                        </div>
+                                    ))}
+                            </div>
                         </div>
 
                         {hasTips && (
-                            <div className="mt-4 text-[#5b4636] text-lg">
-                                <p className="font-bold mb-1">Tips to improve:</p>
-                                {result.features.num_upper === 0 && <p>&emsp; • &nbsp; &nbsp;Add <span className="text-xl text-yellow-700">&nbsp;uppercase&nbsp;</span> letters</p>}
-                                {result.features.num_digit === 0 && <p>&emsp; • &nbsp; &nbsp;Include <span className="text-xl text-yellow-700">&nbsp;numbers&nbsp;</span></p>}
-                                {result.features.num_symbol === 0 && <p>&emsp; • &nbsp; &nbsp;Use special characters<span className="text-xl text-yellow-700">&nbsp; (!@#$%)</span></p>}
-                                {result.features.length < 12 && <p>&emsp; • &nbsp; &nbsp;Make it at least <span className="text-xl text-yellow-700">&nbsp;12 &nbsp;</span>characters</p>}
-                                {(result.features.has_qwerty === 1 || result.features.has_123456 === 1) && (
-                                    <p>&emsp; • &nbsp; <span className="text-xl text-yellow-700">&nbsp;Avoid &nbsp;</span>patterns like &apos;123456&apos; or &apos;qwerty&apos;</p>
-                                )}
+                            <div className="mt-4 text-[#5b4636] text-lg bg-white/80 border-2 border-[#5b4636] rounded-lg p-4 flex flex-col items-center">
+                                <p className="font-bold mb-3 text-xl text-center">Tips to improve:</p>
+                                <div className="w-full flex flex-wrap justify-center gap-x-12 gap-y-3">
+                                    {result.features.num_upper === 0 && (
+                                        <span className="flex items-center"><span className="mr-2">•</span>Add <span className="font-bold text-yellow-700 mx-1">uppercase</span> letters</span>
+                                    )}
+                                    {result.features.num_digit === 0 && (
+                                        <span className="flex items-center"><span className="mr-2">•</span>Include <span className="font-bold text-yellow-700 mx-1">numbers</span></span>
+                                    )}
+                                    {result.features.num_symbol === 0 && (
+                                        <span className="flex items-center"><span className="mr-2">•</span>Use special characters <span className="font-bold text-yellow-700 mx-1">(!@#$%)</span></span>
+                                    )}
+                                    {result.features.length < 12 && (
+                                        <span className="flex items-center"><span className="mr-2">•</span>Make it at least <span className="font-bold text-yellow-700 mx-1">12</span> characters</span>
+                                    )}
+                                    {result.features.has_password === 1 && (
+                                        <span className="flex items-center"><span className="mr-2">•</span>Avoid using <span className="font-bold text-yellow-700 mx-1">common words</span> like &quot;password&quot;</span>
+                                    )}
+                                    {result.features.has_admin === 1 && (
+                                        <span className="flex items-center"><span className="mr-2">•</span>Avoid using <span className="font-bold text-yellow-700 mx-1">admin</span> in your password</span>
+                                    )}
+                                </div>
                             </div>
                         )}
                     </motion.div>
