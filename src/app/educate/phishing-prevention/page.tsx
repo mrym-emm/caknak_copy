@@ -4,7 +4,7 @@ import TopNav from "~/components/TopNav";
 import Footer from "~/components/Footer";
 import FlipCard from "~/components/FlipCard";
 import Link from "next/link";
-import { FaEnvelopeOpenText, FaUserFriends, FaGift, FaSearch, FaShieldAlt, FaQuestionCircle } from "react-icons/fa";
+import { FaEnvelopeOpenText, FaUserFriends, FaGift, FaSearch, FaShieldAlt, FaQuestionCircle, FaArrowUp } from "react-icons/fa";
 import { FaMagnifyingGlass } from "react-icons/fa6";
 
 export default function PhishingPreventionPage() {
@@ -286,6 +286,10 @@ export default function PhishingPreventionPage() {
                         <FaQuestionCircle className="inline-block" /> &nbsp; Click here to Phishing Simulator
                     </Link>
                 </div>
+                <button className="fixed bottom-4 right-4 bg-gray-800 text-white p-2 rounded-full shadow-lg hover:bg-gray-700 transition"
+                    onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
+                    <FaArrowUp className="text-white text-2xl" />
+                </button>
             </div>
             <Footer />
         </main>

@@ -126,9 +126,11 @@ export default function ScanEmailPage() {
               animate={{ scale: 1.8 }}
               exit={{ opacity: 0, scale: 0 }}
               transition={{ type: "spring", stiffness: 120, damping: 12 }}
-              className="fixed inset-0 z-40 flex items-center justify-center pointer-events-none"
+              className="fixed inset-0 z-40 flex items-center justify-center"
+              style={{ pointerEvents: "auto" }}
+              onClick={() => setShowCrystal(false)}
             >
-              <div className="relative">
+              <div className="relative" onClick={(e) => e.stopPropagation()}>
                 <Image
                   src="/main/crystal_orb.png"
                   alt="Crystal Orb"

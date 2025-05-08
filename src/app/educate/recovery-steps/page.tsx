@@ -2,7 +2,7 @@
 
 import TopNav from "~/components/TopNav";
 import Footer from "~/components/Footer";
-import { FaCheckCircle, FaTimesCircle, FaUniversity, FaCreditCard, FaWallet, FaShoppingCart, FaUserSecret, FaExclamationCircle } from "react-icons/fa";
+import { FaCheckCircle, FaTimesCircle, FaUniversity, FaCreditCard, FaWallet, FaShoppingCart, FaUserSecret, FaExclamationCircle, FaArrowUp } from "react-icons/fa";
 import Link from "next/link";
 
 export default function RecoverySteps() {
@@ -170,7 +170,10 @@ export default function RecoverySteps() {
                     </Link>
                 </div>
             </div>
-
+            <button className="fixed bottom-4 right-4 bg-gray-800 text-white p-2 rounded-full shadow-lg hover:bg-gray-700 transition"
+                onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
+                <FaArrowUp className="text-white text-2xl" />
+            </button>
             <Footer />
         </main>
     );
