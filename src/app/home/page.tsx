@@ -5,6 +5,7 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 import TopNav from "~/components/TopNav";
 import Footer from "~/components/Footer";
+import StarryBackground from "~/components/StarryBackground";
 
 export default function Home() {
   const [flippedCard, setFlippedCard] = useState<string | null>(null);
@@ -47,7 +48,7 @@ export default function Home() {
 
   return (
     <main
-      className="min-h-screen flex flex-col"
+      className="min-h-screen flex flex-col relative"
       style={{
         backgroundImage: "url('/textures/parchment-texture.png')",
         backgroundRepeat: "repeat",
@@ -56,14 +57,21 @@ export default function Home() {
         fontFamily: "var(--font-sniglet)",
       }}
     >
-      <TopNav />
+      {/* StarryBackground with lower z-index to appear behind everything */}
+      {/* TopNav with higher z-index */}
+ 
+        <TopNav />
+ 
+      <StarryBackground />
+      
+      
 
-      <section className="flex-grow pt-20 pb-6">
+      <section className="flex-grow pt-20 pb-6 relative z-10">
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-1 place-items-center">
           {sections.map((section) => (
             <div
               key={section.id}
-              className="relative w-64 h-96 cursor-pointer perspective-1000 group"
+              className="relative w-64 h-96 cursor-pointer perspective-1000 group z-10"
             >
               <motion.div
                 className="relative w-full h-full transition-transform duration-[0.1s]"
@@ -81,7 +89,7 @@ export default function Home() {
                 >
                   <h3
                     className="absolute top-4 w-full text-center text-5xl font-bold"
-                    style={{ color: "#4b382a" }}
+                    style={{ color: "#ffc067" }}
                   >
                     {section.title}
                   </h3>
@@ -96,7 +104,7 @@ export default function Home() {
                   </div>
                   <h3
                     className="absolute bottom-4 w-full text-center text-4xl font-bold"
-                    style={{ color: "#4b382a" }}
+                    style={{ color: "#ffc067" }}
                   >
                     {section.title}
                   </h3>
@@ -122,7 +130,7 @@ export default function Home() {
                           className="ml-2 text-sm text-yellow-700 font-bold"
                           style={{ fontFamily: "'Great', cursive" }}
                         >
-                          (click!)
+                        
                         </span>
                       </h4>
                       <p className="text-sm">{item.description}</p>

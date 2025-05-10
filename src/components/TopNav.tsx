@@ -20,7 +20,7 @@ export default function TopNav() {
       label: 'HOME',
       href: '/home',
       submenu: [
-        { label: 'Home', href: '/home', description: 'Welcome to caKnak' }
+        { label: 'Home', href: '/home', description: 'Welcome to CAKNAK' }
       ]
     },
     {
@@ -91,12 +91,16 @@ export default function TopNav() {
         </div>
 
         <Link href="/home" className="text-center">
-          <h1 className="text-6xl text-[#5b4636]" style={{ fontFamily: "'Great', cursive" }}>caKnak</h1>
+          <h1 className="text-6xl text-[#ff991c] font-bold" style={{ fontFamily: "'Great', cursive" }}>CAKNAK</h1>
         </Link>
+
+        <h6 className=" text-[#ffc067] font-semi-bold italic text-center" >Your trusted magical companion for digital safety </h6>
 
         <div className="mb-4"/>
 
-        <div className="container mx-auto px-6 border-b border-[#5b4636]">
+   
+
+        <div className="container mx-auto px-6 border-b border-[#ffffff]">
           <nav className="flex justify-center space-x-24 relative">
             {navItems.map((item, index) => (
               <div
@@ -110,8 +114,8 @@ export default function TopNav() {
               >
                 <span
                   className={`text-lg ${
-                    isActive(item.label) ? 'text-yellow-700' : 'text-[#5b4636]'
-                  } hover:text-yellow-700 cursor-default`}
+                    isActive(item.label) ? 'text-[#ffc067]' : 'text-[#ffffff]'
+                  } hover:text-[#F7D65A] cursor-default`}
                   style={{ fontFamily: "var(--font-sniglet)" }}
                 >
                   {item.label}
