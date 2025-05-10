@@ -57,8 +57,7 @@ export default function Home() {
         fontFamily: "var(--font-sniglet)",
       }}
     >
-      {/* StarryBackground with lower z-index to appear behind everything */}
-      {/* TopNav with higher z-index */}
+      
  
         <TopNav />
  

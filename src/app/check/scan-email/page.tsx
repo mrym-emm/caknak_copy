@@ -47,7 +47,7 @@ export default function ScanEmailPage() {
           created_at: new Date().toISOString(),
         });
 
-      //hibp api to be changed -will talk to yiju abt this
+      //hibp api to be changed 
       const response = await fetch(
         `/api/check-email?email=${encodeURIComponent(email)}`
       );
@@ -82,10 +82,10 @@ export default function ScanEmailPage() {
       <div className="flex flex-col items-center justify-center flex-grow text-center p-6">
 
         {/* ===== Top ===== */}
-        <h1 className="text-4xl text-[#5b4636] font-extrabold mb-4">
+        <h1 className="text-4xl text-[#ffc067] font-extrabold mb-4">
           Check Your Email Security
         </h1>
-        <p className="text-[#5b4636] max-w-lg text-base md:text-lg mb-8">
+        <p className="text-[#ffc067] max-w-lg text-base md:text-lg mb-8">
           Enter your email to scan for hidden risks and data breaches.
         </p>
 
@@ -99,7 +99,7 @@ export default function ScanEmailPage() {
         />
 
         {/* security text */}
-        <div className="mb-4 text-sm text-[#5b4636]">
+        <div className="mb-4 text-sm text-[#ffffc5]">
           <p>
             Your data is <span className="text-xl text-yellow-700">secured</span> with encryption.
             <Link href="https://haveibeenpwned.com/Privacy" target="_blank">
@@ -113,7 +113,7 @@ export default function ScanEmailPage() {
           whileHover={{ scale: 1.05, y: -3, boxShadow: "0 0 20px #fde68a" }}
           onClick={handleScan}
           disabled={loading}
-          className="px-8 py-3 rounded-xl font-bold text-xl text-[#5b4636] border-4 border-[#5b4636] bg-[url('/textures/parchment-texture.png')] bg-cover"
+          className="px-8 py-3 rounded-xl font-bold text-xl text-[#ffffc5] border-4 border-[#ffc067] bg-[url('/textures/parchment-texture.png')] bg-cover"
         >
           {loading ? "Scanning..." : "Scan"}
         </motion.button>
